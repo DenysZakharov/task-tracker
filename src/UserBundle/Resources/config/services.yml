@@ -4,3 +4,19 @@ services:
         public:     false
         tags:
             - { name: security.voter }
+        arguments:
+            - @security.role_hierarchy
+
+    registration.form.type:
+        class: UserBundle\Form\RegistrationFormType
+        tags:
+            - { name: form.type, alias: registration }
+
+    profile.form.type:
+            class: Tracker\UserBundle\Form\ProfileFormType
+            tags:
+                - { name: form.type, alias: profile }
+    edit.form.type:
+        class: UserBundle\Form\UserType
+        tags:
+            - { name: form.type, alias: user_create }

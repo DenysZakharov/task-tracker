@@ -5,49 +5,34 @@
 {% endblock header %}
 
 {% block content %}
-    {% if error %}
-        <div class="container">
-            <div class="flash-notice bg-danger">
+    <div class="col-md-4">
+        {% if error %}
+            <div class="alert alert-warning">
                 {{ error.messageKey|trans(error.messageData, 'security') }}
             </div>
-        </div>
-    {% endif %}
-
-    <a href="{{ path('fos_user_registration_register') }}">{{ "user.page.auth.registration"|trans }}</a> |
-    <a href="{{ path('fos_user_resetting_request') }}">{{ "user.page.auth.forgotPssword"|trans }}</a>
-
-    <form action="{{ path("fos_user_security_check") }}" method="post" class="form-horizontal">
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
-        <div class="form-group">
-            <label for="username" class="col-sm-4 control-label">{{ 'security.login.username'|trans }}</label>
-
-            <div class="col-sm-6">
-                <input type="text" id="username" class="form-control" name="_username" value="{{ last_username }}" required="required" />
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="password" class="col-sm-4 control-label">{{ 'security.login.password'|trans }}</label>
-            <div class="col-sm-6">
-                <input type="password" class="form-control" id="password" name="_password" required="required" />
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-sm-offset-4 col-sm-10">
+        {% endif %}
+        <section class="login-form">
+            <form action="{{ path("fos_user_security_check") }}" method="post" class="form-horizontal">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
+                <label for="username" class="col-sm-4 control-label">{{ 'security.login.username'|trans }}</label>
+                <input type="text" id="username" class="form-control input-lg" name="_username"
+                       value="{{ last_username }}" required="required"/>
+                <label for="password" class="col-sm-4 control-label">{{ 'security.login.password'|trans }}</label>
+                <input type="password" class="form-control input-lg" id="password" name="_password"
+                       required="required"/>
                 <div class="checkbox">
                     <label for="remember_me">
-                        <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+                        <input type="checkbox" id="remember_me" name="_remember_me" value="on"/>
                         {{ 'security.login.remember_me'|trans }}
                     </label>
                 </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-sm-offset-4 col-sm-6">
-                <input type="submit" class="btn btn-default" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" />
-            </div>
-        </div>
-    </form>
+                <div class="pwstrength_viewport_progress"></div>
+                <input type="submit" class="btn btn-lg btn-primary btn-block" id="_submit" name="_submit"
+                       value="{{ 'security.login.submit'|trans }}"/>
+                <div>
+                    <a href="{{ path('fos_user_registration_register') }}">{{ "user.page.auth.registration"|trans }}</a>
+                </div>
+            </form>
+        </section>
+    </div>
 {% endblock content %}

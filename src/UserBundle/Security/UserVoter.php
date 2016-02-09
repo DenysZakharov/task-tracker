@@ -61,64 +61,13 @@ class UserVoter implements VoterInterface
             return self::ACCESS_DENIED;
         }
 
-        switch($attribute) {
-            case self::VIEW:
-                if ($this->userCanView($currentUser, $user)) {
-                    return self::ACCESS_GRANTED;
-                }
-                break;
-            case self::CREATE:
-                if ($this->isSuperUser($currentUser)) {
-                    return self::ACCESS_GRANTED;
-                }
-                break;
-            case self::EDIT:
-                if ($this->canEditUser($currentUser, $user)) {
-                    return self::ACCESS_GRANTED;
-                }
-                break;
+        if ($user === $currentUser || $currentUser->hasRole(User::ROLE_ADMIN)) {
+            return self::ACCESS_GRANTED;
+        }
+        if ($currentUser->hasRole(User::ROLE_OPERATOR) && $attribute == self::VIEW) {
+            return self::ACCESS_GRANTED;
         }
 
         return self::ACCESS_DENIED;
-    }
-
-    /**
-     * @param User $currentUser
-     *
-     * @return bool
-     */
-    public function userCanView(User $currentUser)
-    {
-        $response = false;
-
-        if ($currentUser instanceof User) {
-            $response = true;
-        }
-
-        return $response;
-    }
-
-    public function canEditUser(User $currentUser, User $user)
-    {
-        $response = false;
-        if ($this->isSuperUser($currentUser) || $currentUser->getId() == $user->getId()) {
-            $response = true;
-        }
-
-        return $response;
-    }
-
-    /**
-     * @param User $user
-     *
-     * @return bool
-     */
-    public function isSuperUser(User $user)
-    {
-        if ($user->hasRole(User::ROLE_ADMIN)) {
-            return true;
-        }
-
-        return false;
     }
 }

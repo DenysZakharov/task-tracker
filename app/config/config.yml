@@ -134,6 +134,12 @@ fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
     user_class: UserBundle\Entity\User
+    registration:
+          form:
+            type: registration
+    profile:
+          form:
+            type: user_profile
 
 services:
     fos_user.doctrine_registry:

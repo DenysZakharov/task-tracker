@@ -4,9 +4,36 @@ user:
             registration: "Registration"
             forgotPssword: "Forgot password?"
             login: "Sign in"
+        create:
+            title: "Create new User"
+    grid:
+            username: "Username"
+            fullName: "Full name"
+            email: "Email"
+            role: "Role"
+            lastLogin: "Last login"
+            status: "Status"
+    action:
+            create: "Add new user"
+    details: "User details"
+    form:
+            create: "Create user"
+    status:
+          enabled: "Enabled"
+          disablid: "Disabled"
+layout:
+    logged_in_as: "Hello"
 security:
     login:
         username: "Username"
         password: "Password"
         remember_me: "Remember me"
         submit: "Login"
+registration:
+    submit: "Registration"
+ROLE_USER: "ROLE_USER"
+ROLE_ADMIN: "ROLE_ADMIN"
+ROLE_OPERATOR: "ROLE_OPERATOR"
+ROLE_MANAGER: "ROLE_MANAGER"
+
+

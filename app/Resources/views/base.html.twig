@@ -1,74 +1,65 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>{% block title %}Welcome{% endblock %}</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" media="screen">
-        {% block stylesheets %}{% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-        <!-- HTML5 Shim and Respond.js add IE8 support of HTML5 elements and media queries -->
-        {% include 'BraincraftedBootstrapBundle::ie8-support.html.twig' %}
-    </head>
-    <body>
-    <nav class="container">
-        <div class="">
-            <div class="pull-left">
-                {% block logo %}
-                    <div class="logo">
-                        <a href="">Tracker</a>
-                    </div>
-                {% endblock logo %}
-            </div>
-            {% block menu %}
-                <div class="menu">
+<head>
+    <meta charset="UTF-8"/>
+    <title>{% block title %}Welcome{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" media="screen">
+    {% block stylesheets %}{% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
+    <!-- HTML5 Shim and Respond.js add IE8 support of HTML5 elements and media queries -->
+    {% include 'BraincraftedBootstrapBundle::ie8-support.html.twig' %}
+</head>
+<body>
+<nav class="container">
+    <div class="">
+        {% block logo %}
+            <button type="button" class="btn btn-default btn-lg">
+                <span class="glyphicon glyphicon-home" aria-hidden="true"></span> <a href="{{ path("homepage") }}">TASK
+                    TRACKER</a>
+            </button>
+        {% endblock logo %}
+        {% block menu %}
+            <div class="menu"></div>
+        {% endblock menu %}
+
+        <div class="pull-right">
+            {% block auth %}
+                <div class="auth">
                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                        <a href="#">user
+                        {{ 'layout.logged_in_as'|trans }} <a
+                            href="{{ path("fos_user_profile_show") }}">{{ app.user.username }}</a>
+                        <a href="{{ path('fos_user_security_logout') }}">
+                            {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
                         </a>
                     {% endif %}
                 </div>
-            {% endblock menu %}
-
-            <div class="pull-right">
-                {% block auth %}
-                    <div class="auth">
-                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                            {{ 'layout.logged_in_as'|trans }}
-
-                            <a href="{{ path('fos_user_security_logout') }}">
-                                {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
-                            </a>
-                        {% endif %}
-                    </div>
-                {% endblock auth %}
-            </div>
+            {% endblock auth %}
         </div>
-    </nav>
-
-
-    <div class="container">
-        {% block body %}
-            {% block header %}
-            {% endblock %}
-
-            <div class="container">
-                {% for flashMessage in app.session.flashbag.get('notice') %}
-                    <div class="flash-notice bg-warning">
-                        {{ flashMessage }}
-                    </div>
-                {% endfor %}
-            </div>
-
-            {% block content %}
-            {% endblock %}
-
-            {% block footer %}
-            {% endblock %}
-        {% endblock %}
     </div>
-        <!-- jQuery (necessary for Bootstraps JavaScript plugins) -->
-        <script src="{{ asset('js/jquery.js') }}"></script>
-        <!-- Include all JavaScripts, compiled by Assetic -->
-        <script src="{{ asset('js/bootstrap.js') }}"></script>
-    </body>
+</nav>
+<div class="container">
+    {% block body %}
+        {% block header %}
+        {% endblock %}
+        <div class="container">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="flash-notice bg-warning">
+                    {{ flashMessage }}
+                </div>
+            {% endfor %}
+        </div>
+
+        {% block content %}
+        {% endblock %}
+
+        {% block footer %}
+        {% endblock %}
+    {% endblock %}
+</div>
+<!-- jQuery (necessary for Bootstraps JavaScript plugins) -->
+<script src="{{ asset('js/jquery.js') }}"></script>
+<!-- Include all JavaScripts, compiled by Assetic -->
+<script src="{{ asset('js/bootstrap.js') }}"></script>
+</body>
 </html>
