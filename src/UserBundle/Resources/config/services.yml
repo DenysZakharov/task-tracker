@@ -13,7 +13,7 @@ services:
             - { name: form.type, alias: registration }
 
     profile.form.type:
-            class: Tracker\UserBundle\Form\ProfileFormType
+            class: UserBundle\Form\ProfileFormType
             tags:
                 - { name: form.type, alias: profile }
     edit.form.type:

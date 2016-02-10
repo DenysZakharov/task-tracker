@@ -10,8 +10,6 @@ use FOS\UserBundle\Model\User as BaseUser;
 
 
 /**
- * Class User
- * @package AppBundle\Entity
  * @ORM\Entity
  * @ORM\Table(name="users")
  */
@@ -37,9 +35,17 @@ class User extends BaseUser
      */
     protected $fullName;
 
+    /**
+     * @var ArrayCollection Project[]
+     *
+     * @ORM\ManyToMany(targetEntity="\AppBundle\Entity\Project", mappedBy="users")
+     **/
+    protected $project;
+
     public function __construct()
     {
         parent::__construct();
+        $this->project = new ArrayCollection();
     }
 
     /**
@@ -74,5 +80,38 @@ class User extends BaseUser
     public function getFullName()
     {
         return $this->fullName;
+    }
+
+    /**
+     * Add project
+     *
+     * @param \AppBundle\Entity\Project $project
+     * @return User
+     */
+    public function addProject(\AppBundle\Entity\Project $project)
+    {
+        $this->project[] = $project;
+
+        return $this;
+    }
+
+    /**
+     * Remove project
+     *
+     * @param \AppBundle\Entity\Project $project
+     */
+    public function removeProject(\AppBundle\Entity\Project $project)
+    {
+        $this->project->removeElement($project);
+    }
+
+    /**
+     * Get project
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProject()
+    {
+        return $this->project;
     }
 }

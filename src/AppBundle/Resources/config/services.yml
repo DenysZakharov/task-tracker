@@ -1,0 +1,13 @@
+services:
+    project.security.voter:
+        class:      AppBundle\Security\ProjectVoter
+        public:     false
+        tags:
+            - { name: security.voter }
+        arguments:
+            - @security.role_hierarchy
+
+    project.form.type:
+        class: AppBundle\Form\ProjectFormType
+        tags:
+            - { name: form.type, alias: app_project }

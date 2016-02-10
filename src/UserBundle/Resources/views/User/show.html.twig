@@ -1,43 +1,40 @@
 {% extends '::base.html.twig' %}
 
 {% block body %}
-    <div class="row">
-        <div class="col-md-8">
-            <div class="information user detail">
-                <p class="title">{{ "user.details"|trans }}</p>
-
-                <div class="content">
-                    <div>
-                        <dl class="dl-horizontal">
-                            <dt>{{ "user.grid.username"|trans }}</dt>
-                            <dd>{{ entity.username }}</dd>
-                        </dl>
-
-                        <dl class="dl-horizontal">
-                            <dt>{{ "user.grid.fullName"|trans }}</dt>
-                            <dd>{{ entity.fullName }}</dd>
-                        </dl>
-                        <dl class="dl-horizontal">
-                            <dt>{{ "user.grid.email"|trans }}</dt>
-                            <dd>{{ entity.email }}</dd>
-                        </dl>
-                        <dl class="dl-horizontal">
-                            <dt>{{ "user.grid.role"|trans }}</dt>
-                            <dd>{{ entity.roles[0]|trans }}</dd>
-                        </dl>
-                        <dl class="dl-horizontal">
-                            <dt>{{ "user.grid.status"|trans }}</dt>
-                            <dd>
-                                {% if entity.enabled %}
-                                    {{ "user.status.enabled"|trans }}
-                                {% else %}
-                                    {{ "user.status.disabled"|trans }}
-                                {% endif %}
-                            </dd>
-                        </dl>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <p class="title">{{ "user.details"|trans }}</p>
+    <div class="content">
+        <dl class="dl-horizontal">
+            <dt>{{ "user.grid.username"|trans }}</dt>
+            <dd>{{ entity.username }}</dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>{{ "user.grid.fullName"|trans }}</dt>
+            <dd>{{ entity.fullName }}</dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>{{ "user.grid.email"|trans }}</dt>
+            <dd>{{ entity.email }}</dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>{{ "user.grid.role"|trans }}</dt>
+            <dd>{{ entity.roles[0]|trans }}</dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>{{ "user.grid.status"|trans }}</dt>
+            <dd>
+                {% if entity.enabled %}
+                    {{ "user.status.enabled"|trans }}
+                {% else %}
+                    {{ "user.status.disabled"|trans }}
+                {% endif %}
+            </dd>
+        </dl>
+    </div>
+    <div class="actions">
+        {% if is_granted('edit', entity) %}
+            <a class="btn btn-default" href="{{ path("user_edit", {user: entity.id}) }}">
+                {{ "user.page.edit"|trans }}
+            </a>
+        {% endif %}
     </div>
 {% endblock %}

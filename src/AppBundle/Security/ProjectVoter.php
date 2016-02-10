@@ -1,47 +1,38 @@
 <?php
 
-namespace UserBundle\Security;
+namespace AppBundle\Security;
 
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-use UserBundle\Entity\User;
+use AppBundle\Entity\Project;
+use AppBundle\Entity\User;
 
-class UserVoter implements VoterInterface
+class ProjectVoter implements VoterInterface
 {
     const VIEW = 'view';
     const EDIT = 'edit';
     const CREATE = 'create';
 
-    /**
-     * @param string $attribute
-     *
-     * @return bool
-     */
     public function supportsAttribute($attribute)
     {
-        return in_array($attribute, [
+        return in_array($attribute, array(
             self::VIEW,
             self::EDIT,
             self::CREATE
-        ], false);
+        ), false);
     }
 
-    /**
-     * @param string $class
-     *
-     * @return bool
-     */
     public function supportsClass($class)
     {
-        $supportedClass = 'UserBundle\Entity\User';
+        $supportedClass = 'AppBundle\Entity\Project';
 
         return $supportedClass === $class || is_subclass_of($class, $supportedClass);
     }
 
-    public function vote(TokenInterface $token, $user, array $attributes)
+    public function vote(TokenInterface $token, $project, array $attributes)
     {
-        if (!$this->supportsClass(get_class($user))) {
+        if (!$this->supportsClass(get_class($project))) {
             return self::ACCESS_ABSTAIN;
         }
 
@@ -55,16 +46,13 @@ class UserVoter implements VoterInterface
             return self::ACCESS_ABSTAIN;
         }
 
-        $currentUser = $token->getUser();
+        $user = $token->getUser();
 
         if (!$user instanceof User) {
             return self::ACCESS_DENIED;
         }
 
-        if ($user === $currentUser || $currentUser->hasRole(User::ROLE_ADMIN)) {
-            return self::ACCESS_GRANTED;
-        }
-        if ($currentUser->hasRole(User::ROLE_OPERATOR) && $attribute == self::VIEW) {
+        if ($user->hasRole(User::ROLE_MANAGER) || $user->hasRole(User::ROLE_ADMIN) || $project->isMember($user)) {
             return self::ACCESS_GRANTED;
         }
 

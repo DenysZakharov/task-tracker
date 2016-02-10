@@ -139,7 +139,7 @@ fos_user:
             type: registration
     profile:
           form:
-            type: user_profile
+            type: profile
 
 services:
     fos_user.doctrine_registry:

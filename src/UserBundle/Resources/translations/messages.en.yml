@@ -4,8 +4,8 @@ user:
             registration: "Registration"
             forgotPssword: "Forgot password?"
             login: "Sign in"
-        create:
-            title: "Create new User"
+        create: "Add new User"
+        edit: "Edit user"
     grid:
             username: "Username"
             fullName: "Full name"
@@ -13,11 +13,7 @@ user:
             role: "Role"
             lastLogin: "Last login"
             status: "Status"
-    action:
-            create: "Add new user"
     details: "User details"
-    form:
-            create: "Create user"
     status:
           enabled: "Enabled"
           disablid: "Disabled"
