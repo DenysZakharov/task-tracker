@@ -6,7 +6,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 use AppBundle\Entity\Project;
-use AppBundle\Entity\User;
+use UserBundle\Entity\User;
 
 class ProjectVoter implements VoterInterface
 {
@@ -52,7 +52,17 @@ class ProjectVoter implements VoterInterface
             return self::ACCESS_DENIED;
         }
 
-        if ($user->hasRole(User::ROLE_MANAGER) || $user->hasRole(User::ROLE_ADMIN) || $project->isMember($user)) {
+        if ($project->getUsers()->count() > 0) {
+            $isMemberProject = $project->isMember($user);
+        } else {
+            $isMemberProject = $user->getProject()->count() > 0;
+        }
+
+        if ($isMemberProject && $attribute == self::VIEW) {
+            return self::ACCESS_GRANTED;
+        }
+
+        if ($user->hasRole(User::ROLE_MANAGER) || $user->hasRole(User::ROLE_ADMIN)) {
             return self::ACCESS_GRANTED;
         }
 

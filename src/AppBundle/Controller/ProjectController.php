@@ -5,7 +5,6 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -21,15 +20,59 @@ use AppBundle\Entity\Project;
 class ProjectController extends Controller
 {
     /**
+     * @Route("/list", name="project_list")
+     * @Method("GET")
+     * @Template()
+     */
+    public function indexAction()
+    {
+        $project = new Project();
+        $this->denyAccessUnlessGranted('view', $project);
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $entities = $em->getRepository('AppBundle:Project')->findByUsers($user);
+
+        return [
+            'entities' => $entities,
+            'entity' => $project
+        ];
+    }
+
+    /**
+     * @Route("/{project}/edit", name="project_edit")
+     * @Template()
+     */
+    public function editAction(Project $project)
+    {
+        $this->denyAccessUnlessGranted('edit', $project);
+        $editForm = $this->createForm('app_project', $project, [
+            'action' => $this->generateUrl('project_edit', ['project' => $project->getId()]),
+            'method' => 'POST'
+        ]);
+        if ($this->get('request')->getMethod() === 'POST') {
+            $entityManager = $this->getDoctrine()->getManager();
+            $editForm->handleRequest($this->get('request'));
+            if ($editForm->isValid()) {
+                $entityManager->flush();
+
+                return $this->redirect($this->generateUrl('project_show', ['project' => $project->getId()]));
+            }
+        }
+        return [
+            'entity' => $project,
+            'edit_form' => $editForm->createView()
+        ];
+    }
+
+    /**
      * @Route("/new", name="project_new")
      * @Template
      */
     public function newAction()
     {
-        $this->denyAccessUnlessGranted('create', new Project());
-
-        $entity = new Project();
-        $form = $this->createForm('app_project', $entity, [
+        $project = new Project();
+        $this->denyAccessUnlessGranted('create', $project);
+        $form = $this->createForm('app_project', $project, [
             'action' => $this->generateUrl('project_new'),
             'method' => 'POST'
         ]);
@@ -39,15 +82,26 @@ class ProjectController extends Controller
 
             if ($form->isValid()) {
                 $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($entity);
+                $entityManager->persist($project);
                 $entityManager->flush();
 
-                return $this->redirect($this->generateUrl('project_show', ['user' => $entity->getId()]));
+                return $this->redirect($this->generateUrl('project_show', ['project' => $project->getId()]));
             }
         }
         return [
-            'entity' => $entity,
+            'entity' => $project,
             'form' => $form->createView()
         ];
+    }
+
+    /**
+     * @Route("/{project}", name="project_show")
+     * @Method("GET")
+     * @Template()
+     */
+    public function showAction(Project $project)
+    {
+        $this->denyAccessUnlessGranted('view', $project);
+        return ['entity' => $project];
     }
 }

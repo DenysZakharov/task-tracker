@@ -20,3 +20,4 @@ services:
         class: UserBundle\Form\UserType
         tags:
             - { name: form.type, alias: user_create }
+

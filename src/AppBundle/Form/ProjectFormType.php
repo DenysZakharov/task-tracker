@@ -21,8 +21,13 @@ class ProjectFormType extends AbstractType
             ->add('summary', 'textarea', $attributeDefault)
             ->add('code', 'text', $attributeDefault)
             ->add('users', null, $attributeDefault);
+        if (!$builder->getData()->getId()) {
+            $builder->add('save', 'submit', ['label' => 'project.form.create']);
+        } else {
+            $builder->add('save', 'submit', ['label' => 'project.form.update']);
+        }
     }
-    
+
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(['data_class' => 'AppBundle\Entity\Project']);

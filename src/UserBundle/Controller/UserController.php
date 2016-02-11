@@ -5,7 +5,6 @@ namespace UserBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -26,13 +25,14 @@ class UserController extends Controller
      */
     public function indexAction()
     {
-        $this->denyAccessUnlessGranted('view', new User());
+        $user = new User();
+        $this->denyAccessUnlessGranted('view', $user);
         $em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('UserBundle:User')->findAll();
 
         return [
             'entities' => $entities,
-            'entity' => new User()
+            'entity' => $user
         ];
     }
 
@@ -42,10 +42,10 @@ class UserController extends Controller
      */
     public function newAction()
     {
-        $this->denyAccessUnlessGranted('create', new User());
+        $user = new User();
+        $this->denyAccessUnlessGranted('create', $user);
 
-        $entity = new User();
-        $form = $this->createForm('user_create', $entity, [
+        $form = $this->createForm('user_create', $user, [
             'action' => $this->generateUrl('user_new'),
             'method' => 'POST'
         ]);
@@ -55,14 +55,14 @@ class UserController extends Controller
 
             if ($form->isValid()) {
                 $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($entity);
+                $entityManager->persist($user);
                 $entityManager->flush();
 
-                return $this->redirect($this->generateUrl('user_show', ['user' => $entity->getId()]));
+                return $this->redirect($this->generateUrl('user_show', ['user' => $user->getId()]));
             }
         }
         return [
-            'entity' => $entity,
+            'entity' => $user,
             'form' => $form->createView()
         ];
     }
@@ -74,7 +74,7 @@ class UserController extends Controller
      */
     public function showAction(User $user = null)
     {
-        $this->denyAccessUnlessGranted('view', new User());
+        $this->denyAccessUnlessGranted('view', $user);
         if ($user === null) {
             throw $this->createNotFoundException('User does not exist');
         }
@@ -87,7 +87,7 @@ class UserController extends Controller
      */
     public function editAction(User $user)
     {
-        $this->denyAccessUnlessGranted('view', new User());
+        $this->denyAccessUnlessGranted('edit', $user);
         $editForm = $this->createForm('user_create', $user, [
             'action' => $this->generateUrl('user_edit', ['user' => $user->getId()]),
             'method' => 'POST'

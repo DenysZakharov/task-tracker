@@ -1,0 +1,50 @@
+{% extends '::base.html.twig' %}
+
+{% block content %}
+
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">{{ "project.grid.summary"|trans }}</div>
+        <div class="panel-body">
+            {{ entity.summary }}
+        </div>
+    </div>
+
+    {% if is_granted('edit', entity) %}
+        <p>
+            <a class="btn btn-primary" href="{{ path('project_edit', { 'project': entity.id }) }}">
+                {{ "project.page.edit"|trans }}
+            </a>
+        </p>
+    {% endif %}
+
+    <div class="panel panel-default">
+        <div class="panel-heading">{{ "project.page.members"|trans }}</div>
+        <table class="table-bordered table">
+            <thead>
+            <tr>
+                <td>{{ "project.users.username"|trans }}</td>
+                <td>{{ "project.users.email"|trans }}</td>
+                <td>{{ "project.users.lastLogin"|trans }}</td>
+                <td>{{ "project.users.status"|trans }}</td>
+            </tr>
+            </thead>
+            <tbody class="table-striped">
+            {% for user in entity.users %}
+                <tr>
+                    <td>
+                        <a href="{{ path('user_show', { 'user': user.id }) }}">{{ user.username }}</a>
+                    </td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.lastLogin|date('Y-m-d') }}</td>
+                    {% if (user.enabled) %}
+                        <td class="status success" title="Activated"></td>
+                    {% else %}
+                        <td class="status danger" title="Disabled"></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
