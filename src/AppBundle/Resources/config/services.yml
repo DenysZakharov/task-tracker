@@ -6,8 +6,19 @@ services:
             - { name: security.voter }
         arguments:
             - @security.role_hierarchy
+    issue.security.voter:
+        class:      AppBundle\Security\IssueVoter
+        public:     false
+        tags:
+            - { name: security.voter }
+        arguments:
+            - @security.role_hierarchy
 
     project.form.type:
         class: AppBundle\Form\ProjectFormType
         tags:
             - { name: form.type, alias: app_project }
+    issue.form.type:
+            class: AppBundle\Form\IssueFormType
+            tags:
+                - { name: form.type, alias: app_issue }

@@ -13,6 +13,7 @@ use UserBundle\Entity\User;
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\ProjectRepository")
  * @ORM\Table(name="projects")
+ * @ORM\HasLifecycleCallbacks
  */
 class Project
 {

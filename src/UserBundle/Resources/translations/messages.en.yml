@@ -6,6 +6,7 @@ user:
             login: "Sign in"
         create: "Add new User"
         edit: "Edit user"
+        list: "All users"
     grid:
             username: "Username"
             fullName: "Full name"
@@ -17,6 +18,9 @@ user:
     status:
           enabled: "Enabled"
           disablid: "Disabled"
+    form:
+        update: "Update form"
+        create: "Create form"
 layout:
     logged_in_as: "Hello"
 security:

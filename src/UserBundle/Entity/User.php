@@ -42,10 +42,18 @@ class User extends BaseUser
      **/
     protected $project;
 
+    /**
+     * @var ArrayCollection Issue[]
+     *
+     * @ORM\ManyToMany(targetEntity="\AppBundle\Entity\Issue", mappedBy="collaborators")
+     */
+    protected $issues;
+
     public function __construct()
     {
         parent::__construct();
         $this->project = new ArrayCollection();
+        $this->issues = new ArrayCollection();
     }
 
     /**
@@ -113,5 +121,38 @@ class User extends BaseUser
     public function getProject()
     {
         return $this->project;
+    }
+
+    /**
+     * Add issues
+     *
+     * @param \AppBundle\Entity\Issue $issues
+     * @return User
+     */
+    public function addIssue(\AppBundle\Entity\Issue $issues)
+    {
+        $this->issues[] = $issues;
+
+        return $this;
+    }
+
+    /**
+     * Remove issues
+     *
+     * @param \AppBundle\Entity\Issue $issues
+     */
+    public function removeIssue(\AppBundle\Entity\Issue $issues)
+    {
+        $this->issues->removeElement($issues);
+    }
+
+    /**
+     * Get issues
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getIssues()
+    {
+        return $this->issues;
     }
 }

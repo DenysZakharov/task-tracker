@@ -1,0 +1,34 @@
+project:
+    grid:
+        code: "Username"
+        label: "Label"
+        summary: "Summary"
+        created: "Created date"
+    page:
+        create: "Create project"
+        update: "Update project"
+        users: "Project users"
+    users:
+        username: "User name"
+        email: "Email"
+        lastLogin: "Last login"
+        status: "Status"
+issue:
+    grid:
+        code: "Issue name"
+        type: "Type"
+        summary: "Summary"
+        status: "Status"
+        assignee: "Assignee"
+    page:
+        create: "Create issue"
+        update: "Update issue"
+        list: "Issue list"
+    users:
+        username: "User name"
+        email: "Email"
+        lastLogin: "Last login"
+        status: "Status"
+
+
+

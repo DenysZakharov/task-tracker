@@ -13,58 +13,59 @@ use Symfony\Component\Form\Form;
 
 use UserBundle\Entity\User;
 use AppBundle\Entity\Project;
+use AppBundle\Entity\Issue;
 
 /**
- * @Route("/project")
+ * @Route("/issue")
  */
-class ProjectController extends Controller
+class IssueController extends Controller
 {
     /**
-     * @Route("/", name="project")
+     * @Route("/", name="issue")
      * @Method("GET")
      * @Template()
      */
     public function indexAction()
     {
-        $project = new Project();
-        $this->denyAccessUnlessGranted('view', $project);
+        $issue = new Issue();
+        $this->denyAccessUnlessGranted('view', $issue);
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-        $entities = $em->getRepository('AppBundle:Project')->findByUsers($user);
+        $entities = $em->getRepository('AppBundle:Issue')->findByUser($user);
 
         return [
             'entities' => $entities,
-            'entity' => $project
+            'entity' => $issue
         ];
     }
 
     /**
-     * @Route("/list", name="project_list")
+     * @Route("/list", name="issue_list")
      * @Method("GET")
-     * @Template("AppBundle:Project:index.html.twig")
+     * @Template("AppBundle:Issue:index.html.twig")
      */
     public function listAction()
     {
-        $project = new Project();
-        $this->denyAccessUnlessGranted('view', $project);
+        $issue = new Issue();
+        $this->denyAccessUnlessGranted('view', $issue);
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('AppBundle:Project')->findAll();
+        $entities = $em->getRepository('AppBundle:Issue')->findAll();
 
         return [
             'entities' => $entities,
-            'entity' => $project
+            'entity' => $issue
         ];
     }
 
     /**
-     * @Route("/{project}/edit", name="project_edit")
+     * @Route("/{issue}/edit", name="issue_edit")
      * @Template()
      */
-    public function editAction(Project $project)
+    public function editAction(Issue $issue)
     {
-        $this->denyAccessUnlessGranted('edit', $project);
-        $editForm = $this->createForm('app_project', $project, [
-            'action' => $this->generateUrl('project_edit', ['project' => $project->getId()]),
+        $this->denyAccessUnlessGranted('edit', $issue);
+        $editForm = $this->createForm('app_issue', $issue, [
+            'action' => $this->generateUrl('issue_edit', ['issue' => $issue->getId()]),
             'method' => 'POST'
         ]);
         if ($this->get('request')->getMethod() === 'POST') {
@@ -73,53 +74,52 @@ class ProjectController extends Controller
             if ($editForm->isValid()) {
                 $entityManager->flush();
 
-                return $this->redirect($this->generateUrl('project_show', ['project' => $project->getId()]));
+                return $this->redirect($this->generateUrl('issue_show', ['issue' => $issue->getId()]));
             }
         }
         return [
-            'entity' => $project,
+            'entity' => $issue,
             'edit_form' => $editForm->createView()
         ];
     }
 
     /**
-     * @Route("/new", name="project_new")
+     * @Route("/new", name="issue_new")
      * @Template
      */
     public function newAction()
     {
-        $project = new Project();
-        $this->denyAccessUnlessGranted('create', $project);
-        $form = $this->createForm('app_project', $project, [
-            'action' => $this->generateUrl('project_new'),
+        $issue = new Issue();
+        $this->denyAccessUnlessGranted('create', $issue);
+        $form = $this->createForm('app_issue', $issue, [
+            'action' => $this->generateUrl('issue_new'),
             'method' => 'POST'
         ]);
 
         if ($this->get('request')->getMethod() === 'POST') {
             $form->handleRequest($this->get('request'));
-
             if ($form->isValid()) {
                 $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($project);
+                $entityManager->persist($issue);
                 $entityManager->flush();
 
-                return $this->redirect($this->generateUrl('project_show', ['project' => $project->getId()]));
+                return $this->redirect($this->generateUrl('issue_show', ['issue' => $issue->getId()]));
             }
         }
         return [
-            'entity' => $project,
+            'entity' => $issue,
             'form' => $form->createView()
         ];
     }
 
     /**
-     * @Route("/{project}", name="project_show")
+     * @Route("/{issue}", name="issue_show")
      * @Method("GET")
      * @Template()
      */
-    public function showAction(Project $project)
+    public function showAction(Issue $issue)
     {
-        $this->denyAccessUnlessGranted('view', $project);
-        return ['entity' => $project];
+        $this->denyAccessUnlessGranted('view', $issue);
+        return ['entity' => $issue];
     }
 }

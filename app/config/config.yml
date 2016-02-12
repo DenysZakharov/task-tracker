@@ -94,6 +94,13 @@ doctrine:
         user:     "%database_user%"
         password: "%database_password%"
         charset:  UTF8
+        types:
+            enum_type_issue: AppBundle\Entity\Mapping\EnumTypeIssue
+            enum_status_issue: AppBundle\Entity\Mapping\EnumStatusIssue
+            enum_priority_issue: AppBundle\Entity\Mapping\EnumPriorityIssue
+            enum_resolution_issue: AppBundle\Entity\Mapping\EnumResolutionIssue
+        mapping_types:
+            enum: string
         # if using pdo_sqlite as your database driver:
         #   1. add the path in parameters.yml
         #     e.g. database_path: "%kernel.root_dir%/data/data.db3"

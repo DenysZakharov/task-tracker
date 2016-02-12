@@ -6,20 +6,31 @@
         <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST"
               class="fos_user_registration_register form-horizontal">
             {{ form_widget(form._token) }}
-            {{ form_label(form.email) }}
-            {{ form_widget(form.email) }}
-            {{ form_label(form.fullName) }}
-            {{ form_widget(form.fullName) }}
-            {{ form_label(form.username) }}
-            {{ form_widget(form.username) }}
-            {{ form_label(form.plainPassword.first) }}
-            {{ form_widget(form.plainPassword.first) }}
-            {{ form_label(form.plainPassword.second) }}
-            {{ form_widget(form.plainPassword.second) }}
-
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">{{ form_label(form.email) }}</span>
+                {{ form_widget(form.email) }}
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">{{ form_label(form.fullName) }}</span>
+                {{ form_widget(form.fullName) }}
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1"> {{ form_label(form.username) }}</span>
+                {{ form_widget(form.username) }}
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">{{ form_label(form.plainPassword.first) }}</span>
+                {{ form_widget(form.plainPassword.first) }}
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1"> {{ form_label(form.plainPassword.second) }}</span>
+                {{ form_widget(form.plainPassword.second) }}
+            </div>
             <div class="col-sm-offset-4 col-sm-6">
-                <input type="submit" class="btn btn-lg btn-primary btn-block"
-                       value="{{ 'registration.submit'|trans }}"/>
+                <p>
+                    <input type="submit" class="btn btn-lg btn-primary"
+                           value="{{ 'registration.submit'|trans }}"/>
+                </p>
             </div>
         </form>
     </div>

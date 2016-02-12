@@ -12,7 +12,7 @@ class ProjectFormType extends AbstractType
     {
         $attributeDefault = [
             'label_attr' => ['class' => 'col-sm-4 control-label'],
-            'translation_domain' => 'UserBundle',
+            'translation_domain' => 'AppBundle',
             'attr'=>['class'=> 'form-control']
         ];
 
@@ -22,9 +22,9 @@ class ProjectFormType extends AbstractType
             ->add('code', 'text', $attributeDefault)
             ->add('users', null, $attributeDefault);
         if (!$builder->getData()->getId()) {
-            $builder->add('save', 'submit', ['label' => 'project.form.create']);
+            $builder->add('save', 'submit', ['label' => 'project.page.create']);
         } else {
-            $builder->add('save', 'submit', ['label' => 'project.form.update']);
+            $builder->add('save', 'submit', ['label' => 'project.page.update']);
         }
     }
 
