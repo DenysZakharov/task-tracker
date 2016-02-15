@@ -14,13 +14,16 @@ use UserBundle\Entity\User;
  */
 class ProjectRepository extends EntityRepository
 {
-    public function findByUsers(User $user)
+    public function findByUsers(User $user, $form = false)
     {
         $query = $this->createQueryBuilder('project');
 
         $query->leftJoin('project.users', 'users')
                 ->where('users.id = :user_id')
                 ->setParameter('user_id', $user->getId());
+
+        if ($form)
+            return $query;
 
         return $query->getQuery()->getResult();
     }

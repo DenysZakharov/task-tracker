@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -24,6 +25,8 @@ class Issue
 
     /**
      * @var string
+     *
+     * @ORM\Column(type="string", length=255)
      */
     protected $code;
 
@@ -182,6 +185,29 @@ class Issue
     }
 
     /**
+     * Set code
+     *
+     * @param string $code
+     * @return Issue
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
      * Set description
      *
      * @param string $description
@@ -253,7 +279,7 @@ class Issue
     /**
      * Set resolution
      *
-     * @param enum_resolution_issue $resolution
+     * @param string $resolution
      * @return Issue
      */
     public function setResolution($resolution)
@@ -266,7 +292,7 @@ class Issue
     /**
      * Get resolution
      *
-     * @return enum_resolution_issue 
+     * @return string
      */
     public function getResolution()
     {

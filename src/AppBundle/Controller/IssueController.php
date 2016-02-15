@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -59,22 +60,26 @@ class IssueController extends Controller
 
     /**
      * @Route("/{issue}/edit", name="issue_edit")
+     * @ParamConverter("issue", class="AppBundle:Issue", options={"repository_method" = "findOneByCode"})
      * @Template()
      */
     public function editAction(Issue $issue)
     {
         $this->denyAccessUnlessGranted('edit', $issue);
         $editForm = $this->createForm('app_issue', $issue, [
-            'action' => $this->generateUrl('issue_edit', ['issue' => $issue->getId()]),
+            'action' => $this->generateUrl('issue_edit', ['issue' => $issue->getCode()]),
             'method' => 'POST'
         ]);
         if ($this->get('request')->getMethod() === 'POST') {
             $entityManager = $this->getDoctrine()->getManager();
             $editForm->handleRequest($this->get('request'));
             if ($editForm->isValid()) {
+                if (!$issue->getCollaborators()->contains($issue->getAssignee())) {
+                    $issue->addCollaborator($issue->getAssignee());
+                }
                 $entityManager->flush();
 
-                return $this->redirect($this->generateUrl('issue_show', ['issue' => $issue->getId()]));
+                return $this->redirect($this->generateUrl('issue_show', ['issue' => $issue->getCode()]));
             }
         }
         return [
@@ -99,11 +104,18 @@ class IssueController extends Controller
         if ($this->get('request')->getMethod() === 'POST') {
             $form->handleRequest($this->get('request'));
             if ($form->isValid()) {
+                $user = $this->getUser();
+                $issue->setReporter($user);
+                $issue->addCollaborator($user);
+                $issue->setStatus('Open');
+                if (!$issue->getCollaborators()->contains($issue->getAssignee())) {
+                    $issue->addCollaborator($issue->getAssignee());
+                }
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($issue);
                 $entityManager->flush();
 
-                return $this->redirect($this->generateUrl('issue_show', ['issue' => $issue->getId()]));
+                return $this->redirect($this->generateUrl('issue_show', ['issue' => $issue->getCode()]));
             }
         }
         return [
@@ -113,7 +125,47 @@ class IssueController extends Controller
     }
 
     /**
+     * @Route("/{issue}/newsubtask", name="issue_new_subtask")
+     * @ParamConverter("issue", class="AppBundle:Issue", options={"repository_method" = "findOneByCode"})
+     * @Template("AppBundle:Issue:new.html.twig")
+     */
+    public function subtaskAction(Issue $issue)
+    {
+        $newIssue = new Issue();
+        $this->denyAccessUnlessGranted('add_sub_task', $newIssue);
+        $newIssue->setType('Subtask');
+        $newIssue->setParent($issue);
+        $form = $this->createForm('app_issue', $newIssue, [
+            'action' => $this->generateUrl('issue_new_subtask', ['issue' => $issue->getCode()]),
+            'method' => 'POST'
+        ]);
+
+        if ($this->get('request')->getMethod() === 'POST') {
+            $form->handleRequest($this->get('request'));
+            if ($form->isValid()) {
+                $user = $this->getUser();
+                $newIssue->setReporter($user);
+                $newIssue->addCollaborator($user);
+                $newIssue->setStatus('Open');
+                if (!$newIssue->getCollaborators()->contains($newIssue->getAssignee())) {
+                    $newIssue->addCollaborator($newIssue->getAssignee());
+                }
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($newIssue);
+                $entityManager->flush();
+
+                return $this->redirect($this->generateUrl('issue_show', ['issue' => $newIssue->getCode()]));
+            }
+        }
+        return [
+            'entity' => $newIssue,
+            'form' => $form->createView()
+        ];
+    }
+
+    /**
      * @Route("/{issue}", name="issue_show")
+     * @ParamConverter("issue", class="AppBundle:Issue", options={"repository_method" = "findOneByCode"})
      * @Method("GET")
      * @Template()
      */

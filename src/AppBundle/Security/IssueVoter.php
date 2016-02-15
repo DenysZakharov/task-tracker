@@ -61,7 +61,7 @@ class IssueVoter implements VoterInterface
             $isMemberProject = $user->getProject()->count() > 0;
         }
 
-        if ($user->hasRole(User::ROLE_ADMIN) || $user->hasRole(User::MANAGER) || $isMemberProject) {
+        if ($user->hasRole(User::ROLE_ADMIN) || $user->hasRole(User::ROLE_MANAGER) || $isMemberProject) {
             return self::ACCESS_GRANTED;
         }
 

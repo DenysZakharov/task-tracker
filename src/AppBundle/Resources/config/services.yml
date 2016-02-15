@@ -20,5 +20,7 @@ services:
             - { name: form.type, alias: app_project }
     issue.form.type:
             class: AppBundle\Form\IssueFormType
+            arguments:
+                - @security.token_storage
             tags:
                 - { name: form.type, alias: app_issue }

@@ -1,50 +1,104 @@
 {% extends '::base.html.twig' %}
 
+
 {% block content %}
-
-
-    <div class="panel panel-primary">
-        <div class="panel-heading">{{ "project.grid.summary"|trans }}</div>
-        <div class="panel-body">
-            {{ entity.summary }}
-        </div>
-    </div>
-
-    {% if is_granted('edit', entity) %}
+    {% if is_granted("edit", entity) %}
         <p>
-            <a class="btn btn-primary" href="{{ path('project_edit', { 'project': entity.id }) }}">
-                {{ "project.page.update"|trans }}
+            <a class="btn btn-default" href="{{ path('issue_edit', { 'issue': entity.code }) }}">
+                {{ "issue.page.update"|trans }}
+            </a>
+        </p>
+    {% endif %}
+    {% if is_granted("add_sub_task", entity) and entity.type == 'Story' %}
+
+        <p>
+            <a class="btn btn-default" href="{{ path('issue_new_subtask', { 'issue': entity.code }) }}">
+                {{ "issue.page.create_subtask"|trans }}
             </a>
         </p>
     {% endif %}
 
-    <div class="panel panel-default">
-        <div class="panel-heading">{{ "project.page.users"|trans }}</div>
-        <table class="table-bordered table">
-            <thead>
-            <tr>
-                <td>{{ "project.users.username"|trans }}</td>
-                <td>{{ "project.users.email"|trans }}</td>
-                <td>{{ "project.users.lastLogin"|trans }}</td>
-                <td>{{ "project.users.status"|trans }}</td>
-            </tr>
-            </thead>
-            <tbody class="table-striped">
-            {% for user in entity.users %}
-                <tr>
-                    <td>
-                        <a href="{{ path('user_show', { 'user': user.id }) }}">{{ user.username }}</a>
-                    </td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.lastLogin|date('Y-m-d') }}</td>
-                    {% if (user.enabled) %}
-                        <td class="status success" title="Activated"></td>
+    <div class="panel panel-primary">
+    <div class="panel-heading">{{ "issue.page.details"|trans }}</div>
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt>{{ "issue.grid.summary"|trans }}</dt>
+            <dd>{{ entity.summary }}</dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>{{ "issue.grid.type"|trans }}</dt>
+            <dd>{{ entity.type }}</dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>{{ "issue.grid.priority"|trans }}</dt>
+            <dd>{{ entity.priority }}</dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>{{ "issue.grid.status"|trans }}</dt>
+            <dd>{{ entity.status }}</dd>
+        </dl>
+        {% if entity.resolution %}
+            <dl class="dl-horizontal">
+                <dt>{{ "issue.grid.resolution"|trans }}</dt>
+                <dd>{{ entity.resolution }}</dd>
+            </dl>
+        {% endif %}
+        <dl class="dl-horizontal">
+            <dt>{{ "issue.grid.assignee"|trans }}</dt>
+            <dd>{{ entity.assignee.username }}</dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>{{ "issue.grid.reporter"|trans }}</dt>
+            <dd>{{ entity.reporter.username }}</dd>
+        </dl>
+        {% if entity.parent %}
+            <dl class="dl-horizontal">
+                <dt>{{ "issue.grid.parent"|trans }}</dt>
+                <dd><p><a href="{{ path('issue_show', { 'issue': entity.parent.code }) }}">{{ entity.parent.summary }}</a></p></dd>
+            </dl>
+        {% endif %}
+        {% if entity.project %}
+            <dl class="dl-horizontal">
+                <dt>{{ "issue.grid.project"|trans }}</dt>
+                <dd>
+                    <a href="{{ path('project_show', { 'project': entity.project.id }) }}">{{ entity.project.label }}</a>
+                </dd>
+            </dl>
+        {% endif %}
+        <dl class="dl-horizontal">
+            <dt>{{ "issue.grid.description"|trans }}</dt>
+            <dd>
+                {% if entity.description %}
+                    {{ entity.description }}
+                {% else %}
+                    {{ "issue.noDescription"|trans }}
+                {% endif %}
+            </dd>
+        </dl>
+
+        <dl class="dl-horizontal">
+            <dt>{{ "issue.grid.created"|trans }}</dt>
+            <dd>{{ entity.created|date('Y-m-d') }}</dd>
+        </dl>
+
+        <dl class="dl-horizontal">
+            <dt>{{ "issue.grid.updated"|trans }}</dt>
+            <dd>{{ entity.updated|date('Y-m-d') }}</dd>
+        </dl>
+
+        {% if entity.type == "Story" %}
+            <dl class="dl-horizontal">
+                <dt>{{ "issue.page.subtasks"|trans }}</dt>
+                <dd>
+                    {% if entity.children|length > 0 %}
+                        {% for child in entity.children %}
+                            <p><a href="{{ path('issue_show', { 'issue': child.code }) }}">{{ child.summary }}</a></p>
+                        {% endfor %}
                     {% else %}
-                        <td class="status danger" title="Disabled"></td>
+                        {{ "issue.grid.nosubtask"|trans }}
                     {% endif %}
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </dd>
+            </dl>
+        {% endif %}
     </div>
 {% endblock %}
