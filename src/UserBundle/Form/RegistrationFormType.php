@@ -21,9 +21,7 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $attributeDefault = [
-            'label_attr' => ['class' => 'col-sm-4 control-label'],
-            'translation_domain' => 'FOSUserBundle',
-            'attr'=>['class'=> 'form-control']
+            'translation_domain' => 'FOSUserBundle'
         ];
 
         $attributeEmail = array_merge($attributeDefault, ['label' => 'form.email']);
@@ -34,8 +32,8 @@ class RegistrationFormType extends AbstractType
 
         $builder
             ->add('email', 'email', $attributeEmail)
-            ->add('fullName', null, $attributeFullName)
-            ->add('username', null, $attributeUserName)
+            ->add('fullName', 'text', $attributeFullName)
+            ->add('username', 'text', $attributeUserName)
             ->add('plainPassword', 'repeated', [
                 'type' => 'password',
                 'first_options' => $attrPasswordFirst,

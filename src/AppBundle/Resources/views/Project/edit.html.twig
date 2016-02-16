@@ -2,6 +2,11 @@
 
 {% block content %}
     <div class="col-md-4">
-        {{ form(edit_form, {'attr':{'class':"form-horizontal"}}) }}
+        {{ form_start(edit_form) }}
+        <div class="span8 form-button">
+            <input type="submit" class="btn btn-primary"
+                   value="{{ 'project.page.update'|trans }}"/>
+        </div>
+        {{ form_end(edit_form) }}
     </div>
 {% endblock %}

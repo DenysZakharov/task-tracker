@@ -6,16 +6,13 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 abstract class EnumAbstract extends Type
 {
-    protected $name;
-    protected $values = array();
-
     public function getSqlDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
         $values = array_map(function ($val) {
             return "'" . $val . "'";
-        }, $this->values);
+        }, $this->getValues());
 
-        return "ENUM(" . implode(", ", $values) . ") COMMENT '(DC2Type:" . $this->name . ")'";
+        return "ENUM(" . implode(", ", $values) . ") COMMENT '(DC2Type:" . $this->getName() . ")'";
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
@@ -25,14 +22,11 @@ abstract class EnumAbstract extends Type
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        if (!in_array($value, $this->values)) {
-            throw new \InvalidArgumentException("Invalid '" . $this->name . "' value.");
+        if (!in_array($value, $this->getValues())) {
+            throw new \InvalidArgumentException("Invalid '" . $this->getName() . "' value.");
         }
         return $value;
     }
 
-    public function getName()
-    {
-        return $this->name;
-    }
+    abstract public function getValues();
 }

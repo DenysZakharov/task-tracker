@@ -5,6 +5,8 @@ namespace UserBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -21,17 +23,23 @@ class UserController extends Controller
     /**
      * @Route("/list", name="user_list")
      * @Method("GET")
+     * @Security("is_granted('view', user)")
      * @Template()
      */
     public function indexAction()
     {
-        $user = new User();
-        $this->denyAccessUnlessGranted('view', $user);
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('UserBundle:User')->findAll();
 
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->getInt('page', 1),
+            10
+        );
         return [
-            'entities' => $entities,
+            'entities' => $pagination,
             'entity' => $user
         ];
     }
@@ -70,24 +78,22 @@ class UserController extends Controller
     /**
      * @Route("/{user}", name="user_show")
      * @Method("GET")
+     * @Security("is_granted('view', user)")
+     * @ParamConverter("user", class="UserBundle:User")
      * @Template()
      */
-    public function showAction(User $user = null)
+    public function showAction(User $user)
     {
-        $this->denyAccessUnlessGranted('view', $user);
-        if ($user === null) {
-            throw $this->createNotFoundException('User does not exist');
-        }
         return ['entity' => $user];
     }
 
     /**
      * @Route("/{user}/edit", name="user_edit")
+     * @Security("is_granted('edit', user)")
      * @Template()
      */
     public function editAction(User $user)
     {
-        $this->denyAccessUnlessGranted('edit', $user);
         $editForm = $this->createForm('user_create', $user, [
             'action' => $this->generateUrl('user_edit', ['user' => $user->getId()]),
             'method' => 'POST'

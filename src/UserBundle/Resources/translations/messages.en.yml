@@ -31,9 +31,9 @@ security:
         submit: "Login"
 registration:
     submit: "Registration"
-ROLE_USER: "ROLE_USER"
-ROLE_ADMIN: "ROLE_ADMIN"
-ROLE_OPERATOR: "ROLE_OPERATOR"
-ROLE_MANAGER: "ROLE_MANAGER"
+role:
+    admin: "Admin"
+    operator: "Operator"
+    manager: "Manager"
 
 

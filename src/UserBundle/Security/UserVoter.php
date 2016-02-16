@@ -24,7 +24,7 @@ class UserVoter implements VoterInterface
             self::VIEW,
             self::EDIT,
             self::CREATE
-        ], false);
+        ]);
     }
 
     /**
@@ -35,8 +35,7 @@ class UserVoter implements VoterInterface
     public function supportsClass($class)
     {
         $supportedClass = 'UserBundle\Entity\User';
-
-        return $supportedClass === $class || is_subclass_of($class, $supportedClass);
+        return is_a($supportedClass, $class, true);
     }
 
     public function vote(TokenInterface $token, $user, array $attributes)
@@ -68,6 +67,6 @@ class UserVoter implements VoterInterface
             return self::ACCESS_GRANTED;
         }
 
-        return self::ACCESS_DENIED;
+        return self::ACCESS_ABSTAIN;
     }
 }

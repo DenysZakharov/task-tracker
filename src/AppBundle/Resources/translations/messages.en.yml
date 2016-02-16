@@ -8,6 +8,7 @@ project:
         create: "Create project"
         update: "Update project"
         users: "Project users"
+        list: "Project list"
     users:
         username: "User name"
         email: "Email"
@@ -37,6 +38,7 @@ issue:
         create_subtask: "Create subtask"
         details: "Issue details"
         subtasks: "Subtasks"
+        collaborators: "Collaborators"
     users:
         username: "User name"
         email: "Email"

@@ -21,14 +21,12 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $attributeDefault = [
-            'label_attr' => ['class' => 'col-sm-4 control-label'],
-            'translation_domain' => 'FOSUserBundle',
-            'attr' => ['class' => 'form-control']
+            'translation_domain' => 'FOSUserBundle'
         ];
         $builder
             ->add('email', 'email', $attributeDefault)
-            ->add('username', null, $attributeDefault)
-            ->add('fullName', null, $attributeDefault)
+            ->add('username', 'text', $attributeDefault)
+            ->add('fullName', 'text', $attributeDefault)
             ->add('plainPassword', 'repeated', [
                 'type' => 'password',
                 'options' => [
@@ -44,12 +42,13 @@ class UserType extends AbstractType
             ])
             ->add('roles', 'choice', [
                 'choices' => [
-                    'ROLE_ADMIN' => "Admin",
-                    'ROLE_MANAGER' => "Manager",
-                    'ROLE_OPERATOR' => "Operator"
+                    'ROLE_ADMIN' => "role.admin",
+                    'ROLE_MANAGER' => "role.manager",
+                    'ROLE_OPERATOR' => "role.operator"
                 ],
                 'label' => 'Roles',
                 'multiple' => true,
+                'translation_domain' => 'UserBundle'
             ])
             ->add('enabled', 'choice', [
                 'choices' => [
@@ -58,11 +57,5 @@ class UserType extends AbstractType
                 ],
                 'label' => 'Enabled'
             ]);
-
-        if (!$builder->getData()->getId()) {
-            $builder->add('save', 'submit', array('label' => 'user.form.create'));
-        } else {
-            $builder->add('save', 'submit', array('label' => 'user.form.update'));
-        }
     }
 }

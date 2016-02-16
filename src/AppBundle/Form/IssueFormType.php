@@ -11,6 +11,10 @@ use Symfony\Component\Form\FormEvents;
 use Doctrine\ORM\EntityRepository;
 use AppBundle\Entity\ProjectRepository;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use AppBundle\Entity\Mapping\EnumPriorityIssue;
+use AppBundle\Entity\Mapping\EnumTypeIssue;
+use AppBundle\Entity\Mapping\EnumStatusIssue;
+use AppBundle\Entity\Mapping\EnumResolutionIssue;
 
 class IssueFormType extends AbstractType
 {
@@ -25,8 +29,7 @@ class IssueFormType extends AbstractType
     {
         $user = $this->security->getToken()->getUser();
         $attributeDefault = [
-            'translation_domain' => 'AppBundle',
-            'attr' => ['class' => 'form-control']
+            'translation_domain' => 'AppBundle'
         ];
         $builder->addEventListener(
             FormEvents::PRE_SET_DATA,
@@ -36,38 +39,35 @@ class IssueFormType extends AbstractType
                 if ($issue->getType() === null) {
                     $form->add('type', 'choice', [
                         'choices' => [
-                            'Bug' => 'issue.type.bug',
-                            'Task' => 'issue.type.task',
-                            'Story' => 'issue.type.story'
+                            EnumTypeIssue::BUG => 'issue.type.bug',
+                            EnumTypeIssue::TASK => 'issue.type.task',
+                            EnumTypeIssue::STORY => 'issue.type.story'
                         ],
                         'required' => true,
                         'translation_domain' => 'AppBundle'
                     ]);
                 }
-                if (!$issue->getId() || $issue->getType() == 'Subtask') {
-                    $form->add('save', 'submit', ['label' => 'issue.page.create']);
-                } else {
+                if ($issue->getId() || $issue->getType() != EnumTypeIssue::SUBTASK) {
                     $form->add('resolution', 'choice', [
                         'choices' => [
-                            'Fixed' => 'issue.resolution.fixed',
-                            'Won_t_fix' => 'issue.resolution.wontfix',
-                            'Cannot_reproduce' => 'issue.resolution.cannotrepr',
-                            'Done' => 'issue.resolution.done',
-                            'Won_t_done' => 'issue.resolution.wontdone'
+                            EnumResolutionIssue::FIXED => 'issue.resolution.fixed',
+                            EnumResolutionIssue::WONTFIX => 'issue.resolution.wontfix',
+                            EnumResolutionIssue::CANNOT_REPRODUCE => 'issue.resolution.cannotrepr',
+                            EnumResolutionIssue::DONE => 'issue.resolution.done',
+                            EnumResolutionIssue::WONTDONE => 'issue.resolution.wontdone'
                         ],
                         'required' => true,
                         'translation_domain' => 'AppBundle'
                     ])
                         ->add('status', 'choice', [
                             'choices' => [
-                                'Open' => 'issue.status.open',
-                                'In progress' => 'issue.status.inprogress',
-                                'Closed' => 'issue.status.closed'
+                                EnumStatusIssue::OPEN => 'issue.status.open',
+                                EnumStatusIssue::INPROGRESS => 'issue.status.inprogress',
+                                EnumStatusIssue::CLOSED => 'issue.status.closed'
                             ],
                             'required' => true,
                             'translation_domain' => 'AppBundle'
-                        ])
-                        ->add('save', 'submit', ['label' => 'issue.page.update']);
+                        ]);
                 }
             });
         $builder
@@ -76,22 +76,11 @@ class IssueFormType extends AbstractType
             ->add('description', 'textarea', $attributeDefault)
             ->add('priority', 'choice', [
                 'choices' => [
-                    'Trivial' => 'issue.priority.trivial',
-                    'Minor' => 'issue.priority.minor',
-                    'Major' => 'issue.priority.major',
-                    'Critical' => 'issue.priority.critical',
-                    'Blocker' => 'issue.priority.blocker'
-                ],
-                'required' => true,
-                'translation_domain' => 'AppBundle'
-            ])
-            ->add('priority', 'choice', [
-                'choices' => [
-                    'Trivial' => 'issue.required.trivial',
-                    'Minor' => 'issue.required.minor',
-                    'Major' => 'issue.required.major',
-                    'Critical' => 'issue.required.critical',
-                    'Blocker' => 'issue.required.blocker'
+                    EnumPriorityIssue::TRIVIAL => 'issue.priority.trivial',
+                    EnumPriorityIssue::MINOR => 'issue.priority.minor',
+                    EnumPriorityIssue::MAJOR => 'issue.priority.major',
+                    EnumPriorityIssue::CRITICAL => 'issue.priority.critical',
+                    EnumPriorityIssue::BLOCKER => 'issue.priority.blocker'
                 ],
                 'required' => true,
                 'translation_domain' => 'AppBundle'

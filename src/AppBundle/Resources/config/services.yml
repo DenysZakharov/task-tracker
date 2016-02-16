@@ -2,25 +2,33 @@ services:
     project.security.voter:
         class:      AppBundle\Security\ProjectVoter
         public:     false
-        tags:
-            - { name: security.voter }
         arguments:
             - @security.role_hierarchy
+        tags:
+            - { name: security.voter }
+
     issue.security.voter:
         class:      AppBundle\Security\IssueVoter
         public:     false
-        tags:
-            - { name: security.voter }
         arguments:
             - @security.role_hierarchy
+        tags:
+            - { name: security.voter }
 
     project.form.type:
         class: AppBundle\Form\ProjectFormType
         tags:
             - { name: form.type, alias: app_project }
+
     issue.form.type:
             class: AppBundle\Form\IssueFormType
             arguments:
                 - @security.token_storage
             tags:
                 - { name: form.type, alias: app_issue }
+
+    app.twig_extension:
+        class: AppBundle\Twig\AppExtension
+        public: false
+        tags:
+            - { name: twig.extension }

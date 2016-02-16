@@ -23,7 +23,13 @@
             {% endfor %}
             </tbody>
         </table>
+        <div class="navigation">
+            {% if entities.currentPageNumber is defined %}
+                {{ knp_pagination_render(entities) }}
+            {% endif %}
+        </div>
     </div>
+
     {% if is_granted('create', entity) %}
         <p>
             <a class="btn btn-primary" href="{{ path('project_new') }}">

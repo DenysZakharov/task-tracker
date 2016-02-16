@@ -2,10 +2,10 @@ services:
     user.security.voter:
         class:      UserBundle\Security\UserVoter
         public:     false
-        tags:
-            - { name: security.voter }
         arguments:
             - @security.role_hierarchy
+        tags:
+            - { name: security.voter }
 
     registration.form.type:
         class: UserBundle\Form\RegistrationFormType

@@ -5,6 +5,8 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -22,12 +24,13 @@ class ProjectController extends Controller
     /**
      * @Route("/", name="project")
      * @Method("GET")
+     * @Security("is_granted('view', user)")
      * @Template()
      */
     public function indexAction()
     {
-        $project = new Project();
-        $this->denyAccessUnlessGranted('view', $project);
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $project = $user->getProject();
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
         $entities = $em->getRepository('AppBundle:Project')->findByUsers($user);
@@ -41,28 +44,36 @@ class ProjectController extends Controller
     /**
      * @Route("/list", name="project_list")
      * @Method("GET")
+     * @Security("is_granted('view', user)")
      * @Template("AppBundle:Project:index.html.twig")
      */
     public function listAction()
     {
-        $project = new Project();
-        $this->denyAccessUnlessGranted('view', $project);
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $project = $user->getProject();
         $em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('AppBundle:Project')->findAll();
 
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->getInt('page', 1),
+            10
+        );
+
         return [
-            'entities' => $entities,
-            'entity' => $project
+            'entities' => $pagination,
+            'entity' => $project,
         ];
     }
 
     /**
      * @Route("/{project}/edit", name="project_edit")
+     * @Security("is_granted('edit', project)")
      * @Template()
      */
     public function editAction(Project $project)
     {
-        $this->denyAccessUnlessGranted('edit', $project);
         $editForm = $this->createForm('app_project', $project, [
             'action' => $this->generateUrl('project_edit', ['project' => $project->getId()]),
             'method' => 'POST'
@@ -114,12 +125,12 @@ class ProjectController extends Controller
 
     /**
      * @Route("/{project}", name="project_show")
+     * @Security("is_granted('view', project)")
      * @Method("GET")
      * @Template()
      */
     public function showAction(Project $project)
     {
-        $this->denyAccessUnlessGranted('view', $project);
         return ['entity' => $project];
     }
 }

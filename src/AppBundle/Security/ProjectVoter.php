@@ -16,18 +16,17 @@ class ProjectVoter implements VoterInterface
 
     public function supportsAttribute($attribute)
     {
-        return in_array($attribute, array(
+        return in_array($attribute, [
             self::VIEW,
             self::EDIT,
             self::CREATE
-        ), false);
+        ]);
     }
 
     public function supportsClass($class)
     {
         $supportedClass = 'AppBundle\Entity\Project';
-
-        return $supportedClass === $class || is_subclass_of($class, $supportedClass);
+        return is_a($supportedClass, $class, true);
     }
 
     public function vote(TokenInterface $token, $project, array $attributes)
@@ -66,6 +65,6 @@ class ProjectVoter implements VoterInterface
             return self::ACCESS_GRANTED;
         }
 
-        return self::ACCESS_DENIED;
+        return self::ACCESS_ABSTAIN;
     }
 }

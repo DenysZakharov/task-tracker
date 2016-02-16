@@ -2,6 +2,11 @@
 
 {% block content %}
     <div class="col-md-4">
-        {{ form(form) }}
+        {{ form_start(form, {'label_attr': {'class' : 'col-sm-4 control-label'}}) }}
+        <div class="span8 form-button">
+            <input type="submit" class="btn btn-primary"
+                   value="{{ 'user.page.create'|trans }}"/>
+        </div>
+        {{ form_end(form) }}
     </div>
 {% endblock %}
