@@ -47,7 +47,7 @@ class IssueFormType extends AbstractType
                         'translation_domain' => 'AppBundle'
                     ]);
                 }
-                if ($issue->getId() || $issue->getType() != EnumTypeIssue::SUBTASK) {
+                if ($issue->getType() !== null && $issue->getType() != EnumTypeIssue::SUBTASK) {
                     $form->add('resolution', 'choice', [
                         'choices' => [
                             EnumResolutionIssue::FIXED => 'issue.resolution.fixed',
@@ -113,10 +113,5 @@ class IssueFormType extends AbstractType
     public function getName()
     {
         return 'app_issue';
-    }
-
-    public function setProject(Project $project)
-    {
-        $this->project = $project;
     }
 }

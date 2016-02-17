@@ -21,14 +21,26 @@ services:
             - { name: form.type, alias: app_project }
 
     issue.form.type:
-            class: AppBundle\Form\IssueFormType
-            arguments:
-                - @security.token_storage
-            tags:
-                - { name: form.type, alias: app_issue }
+        class: AppBundle\Form\IssueFormType
+        arguments:
+            - @security.token_storage
+        tags:
+            - { name: form.type, alias: app_issue }
+
+    comment.form.type:
+        class: AppBundle\Form\CommentFormType
+        tags:
+            - { name: form.type, alias: app_issue_comment }
 
     app.twig_extension:
         class: AppBundle\Twig\AppExtension
         public: false
         tags:
             - { name: twig.extension }
+
+    collaborator.listener:
+        class: AppBundle\EventListener\CollaboratorEventListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: preUpdate }
+            - { name: doctrine.event_listener, event: postUpdate }

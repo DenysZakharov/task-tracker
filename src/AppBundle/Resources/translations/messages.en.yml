@@ -44,6 +44,16 @@ issue:
         email: "Email"
         lastLogin: "Last login"
         status: "Status"
+    comment:
+        body: "Massage text"
+        add: "Add comment"
+        update: "Update comment"
+        details: "Comments"
+        author: "Author"
+        created: "Created date"
+        delete: "Delete"
+
+
 
 
 

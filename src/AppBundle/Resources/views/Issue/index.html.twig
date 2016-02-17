@@ -16,11 +16,15 @@
             <tbody>
             {% for entity in entities %}
                 <tr>
-                    <td><a href="{{ path('issue_show', { 'issue': entity.code }) }}">{{ entity.code|default('undefined') }}</a></td>
+                    <td>
+                        <a href="{{ path('issue_show', { 'issue': entity.code }) }}">{{ entity.code|default('undefined') }}</a>
+                    </td>
                     <td>{{ entity.type }}</td>
                     <td>{{ entity.summary }}</td>
                     <td>{{ entity.status }}</td>
-                    <td><a href="{{ path('user_show', { 'user': entity.assignee }) }}">{{ entity.assignee.username }}</a></td>
+                    <td>
+                        <a href="{{ path('user_show', { 'user': entity.assignee }) }}">{{ entity.assignee.username }}</a>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -31,11 +35,9 @@
             {% endif %}
         </div>
     </div>
-    {% if is_granted('create', entity) %}
-        <p>
-            <a class="btn btn-primary" href="{{ path('issue_new') }}">
-                {{ "issue.page.create"|trans }}
-            </a>
-        </p>
-    {% endif %}
+    <p>
+        <a class="btn btn-primary" href="{{ path('issue_new') }}">
+            {{ "issue.page.create"|trans }}
+        </a>
+    </p>
 {% endblock %}

@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-
+{% import "AppBundle::macros.html.twig" as CI %}
 
 {% block content %}
     {% if is_granted("edit", entity) %}
@@ -106,8 +106,35 @@
         </div>
     </div>
     {% if entity.collaborators|length > 0 %}
-        {% include 'AppBundle:Issue:collaborators.html.twig' with { 'collaborators': entity.collaborators } %}
+        {{ CI.renderCollaborators(entity.collaborators) }}
     {% else %}
         {{ "issue.noCollaborators"|trans }}
     {% endif %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">{{ "issue.comment.details"|trans }}</div>
+        <div class="panel-body">
+            {% for comment in entity.comments %}
+                <dl class="dl-horizontal">
+                    <dt>{{ "issue.comment.author"|trans }}</dt>
+                    <dd>{{ comment.author }}</dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>{{ "issue.comment.created"|trans }}</dt>
+                    <dd>{{ comment.updated|date('Y-m-d') }}</dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>{{ "issue.comment.body"|trans }}</dt>
+                    <dd>{{ comment.body }}</dd>
+                </dl>
+                <a class="btn btn-default" href="{{ path('issue_edit_comment', {"issue":entity.code,"comment":comment.id}) }}">{{ "issue.comment.update"|trans }}</a>
+                <a class="btn btn-default" href="{{ path('issue_delete_comment', {"issue":entity.code,"comment":comment.id}) }}">{{ "issue.comment.delete"|trans }}</a>
+                <hr>
+            {% endfor %}
+
+            {{ form_start(comment_form, {'attr':{'class':"form-inline"}}) }}
+                <input type="submit" class="btn btn-primary"
+                       value="{{ 'issue.comment.add'|trans }}"/>
+            {{ form_end(comment_form) }}
+        </div>
+    </div>
 {% endblock %}

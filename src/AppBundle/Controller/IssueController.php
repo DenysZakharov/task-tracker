@@ -16,6 +16,7 @@ use Symfony\Component\Form\Form;
 use UserBundle\Entity\User;
 use AppBundle\Entity\Project;
 use AppBundle\Entity\Issue;
+use AppBundle\Entity\Comment;
 use AppBundle\Entity\Mapping\EnumStatusIssue;
 use AppBundle\Entity\Mapping\EnumTypeIssue;
 
@@ -86,9 +87,6 @@ class IssueController extends Controller
             $entityManager = $this->getDoctrine()->getManager();
             $editForm->handleRequest($this->get('request'));
             if ($editForm->isValid()) {
-                if (!$issue->getCollaborators()->contains($issue->getAssignee())) {
-                    $issue->addCollaborator($issue->getAssignee());
-                }
                 $entityManager->flush();
 
                 return $this->redirect($this->generateUrl('issue_show', ['issue' => $issue->getCode()]));
@@ -118,11 +116,7 @@ class IssueController extends Controller
             if ($form->isValid()) {
                 $user = $this->getUser();
                 $issue->setReporter($user);
-                $issue->addCollaborator($user);
                 $issue->setStatus(EnumStatusIssue::OPEN);
-                if (!$issue->getCollaborators()->contains($issue->getAssignee())) {
-                    $issue->addCollaborator($issue->getAssignee());
-                }
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($issue);
                 $entityManager->flush();
@@ -157,11 +151,7 @@ class IssueController extends Controller
             if ($form->isValid()) {
                 $user = $this->getUser();
                 $newIssue->setReporter($user);
-                $newIssue->addCollaborator($user);
                 $newIssue->setStatus(EnumStatusIssue::OPEN);
-                if (!$newIssue->getCollaborators()->contains($newIssue->getAssignee())) {
-                    $newIssue->addCollaborator($newIssue->getAssignee());
-                }
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($newIssue);
                 $entityManager->flush();
@@ -184,6 +174,83 @@ class IssueController extends Controller
      */
     public function showAction(Issue $issue)
     {
-        return ['entity' => $issue];
+        $createCommentForm = $this->createForm('app_issue_comment', new Comment(), [
+            'action' => $this->generateUrl('issue_new_comment', ['issue' => $issue->getCode()]),
+            'method' => 'POST'
+        ]);
+        return [
+            'entity' => $issue,
+            'comment_form' => $createCommentForm->createView()
+        ];
+    }
+
+    /**
+     * @Route("/{issue}/{comment}/edit", name="issue_edit_comment")
+     * @ParamConverter("issue", class="AppBundle:Issue", options={"repository_method" = "findOneByCode"})
+     * @Template()
+     */
+    public function editCommentAction(Comment $comment)
+    {
+        $editForm = $this->createForm('app_issue_comment', $comment, [
+            'action' => $this->generateUrl('issue_edit_comment', ['comment' => $comment->getId(), 'issue' => $comment->getIssue()->getCode()]),
+            'method' => 'POST'
+        ]);
+        if ($this->get('request')->getMethod() === 'POST') {
+            $entityManager = $this->getDoctrine()->getManager();
+            $editForm->handleRequest($this->get('request'));
+            if ($editForm->isValid()) {
+                $entityManager->flush();
+                return $this->redirect($this->generateUrl('issue_show', ['issue' => $comment->getIssue()->getCode()]));
+            }
+        }
+        return [
+            'entity' => $comment,
+            'edit_form' => $editForm->createView()
+        ];
+    }
+
+    /**
+     * @Route("/{issue}/comment/new", name="issue_new_comment")
+     * @ParamConverter("issue", class="AppBundle:Issue", options={"repository_method" = "findOneByCode"})
+     * @Template("AppBundle:Issue:edit.html.twig")
+     */
+    public function newCommentAction(Issue $issue)
+    {
+        $comment = new Comment();
+        $form = $this->createForm('app_issue_comment', $comment, [
+            'action' => $this->generateUrl('issue_new_comment', ['issue' => $issue->getCode()]),
+            'method' => 'POST'
+        ]);
+
+        if ($this->get('request')->getMethod() === 'POST') {
+            $form->handleRequest($this->get('request'));
+            if ($form->isValid()) {
+                $user = $this->getUser();
+                $comment->setAuthor($user);
+                $comment->setIssue($issue);
+                $issue->addComment($comment);
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($comment);
+                $entityManager->flush();
+
+                return $this->redirect($this->generateUrl('issue_show', ['issue' => $issue->getCode()]));
+            }
+        }
+        return [
+            'entity' => $comment->getIssue(),
+            'form' => $form->createView()
+        ];
+    }
+    /**
+     * @Route("/{issue}/{comment}/delete", name="issue_delete_comment")
+     * @ParamConverter("issue", class="AppBundle:Issue", options={"repository_method" = "findOneByCode"})
+     */
+    public function deleteAction($issue, Comment $comment)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($comment);
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('issue_show', ['issue' => $issue->getCode()]));
     }
 }

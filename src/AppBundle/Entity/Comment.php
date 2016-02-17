@@ -29,6 +29,14 @@ class Comment
     protected $issue;
 
     /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
+     */
+    protected $author;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="body", type="text")
@@ -119,5 +127,37 @@ class Comment
     public function getIssue()
     {
         return $this->issue;
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function beforeSave()
+    {
+        $this->updated = new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * Set author
+     *
+     * @param \UserBundle\Entity\User $author
+     * @return Comment
+     */
+    public function setAuthor(\UserBundle\Entity\User $author = null)
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    /**
+     * Get author
+     *
+     * @return \UserBundle\Entity\User 
+     */
+    public function getAuthor()
+    {
+        return $this->author;
     }
 }

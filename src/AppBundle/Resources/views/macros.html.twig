@@ -1,0 +1,65 @@
+{% macro renderCollaborators(collaborators) %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">{{ "issue.page.collaborators"|trans }}</div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>{{ "user.grid.fullName"|trans }}</th>
+                <th>{{ "user.grid.lastLogin"|trans }}</th>
+                <th>{{ "user.grid.status"|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for collaborator in collaborators %}
+                <tr>
+                    <td>
+                        <a href="{{ path('user_show', { 'user': collaborator.id }) }}">{{ collaborator.fullName|default('undefined') }}</a>
+                    </td>
+                    <td>{{ collaborator.lastlogin|date('Y-m-d') }}</td>
+                    {% if collaborator.enabled %}
+                        <td class="status success" title="Activated"></td>
+                    {% else %}
+                        <td class="status danger" title="Disabled"></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endmacro %}
+{% macro listOpenedReaopenedIssue(issues) %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">{{ "issue.page.list"|trans }}</div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>{{ 'issue.grid.code'|trans }}</th>
+                <th>{{ 'issue.grid.type'|trans }}</th>
+                <th>{{ 'issue.grid.summary'|trans }}</th>
+                <th>{{ 'issue.grid.status'|trans }}</th>
+                <th>{{ 'issue.grid.assignee'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for issue in issues %}
+                <tr>
+                    <td>
+                        <a href="{{ path('issue_show', { 'issue': issue.code }) }}">{{ issue.code|default('undefined') }}</a>
+                    </td>
+                    <td>{{ issue.type }}</td>
+                    <td>{{ issue.summary }}</td>
+                    <td>{{ issue.status }}</td>
+                    <td>
+                        <a href="{{ path('user_show', { 'user': issue.assignee }) }}">{{ issue.assignee.username }}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="navigation">
+            {% if issues.currentPageNumber is defined %}
+                {{ knp_pagination_render(issues) }}
+            {% endif %}
+        </div>
+    </div>
+{% endmacro %}
