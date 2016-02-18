@@ -41,4 +41,7 @@
             </p>
         {% endif %}
     </div>
+    {% if activities|length > 0 %}
+        {% include 'AppBundle:Activity:activity.html.twig' with { 'activities': activities } %}
+    {% endif %}
 {% endblock %}

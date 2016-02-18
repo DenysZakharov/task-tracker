@@ -6,14 +6,16 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 
 use AppBundle\Entity\Issue;
+use AppBundle\Entity\Comment;
+use AppBundle\Entity\User;
 
 class CollaboratorEventListener
 {
-    public function preUpdate(LifecycleEventArgs $args)
+    public function preUpdate(PreUpdateEventArgs $args)
     {
         $entity = $args->getEntity();
         if ($entity instanceof Issue) {
-            if ($this->hasChangedField($args, 'assignee')) {
+            if ($args->hasChangedField('assignee')) {
                 $entity->addCollaborator($entity->getAssignee());
             }
         }
@@ -36,10 +38,12 @@ class CollaboratorEventListener
                 $entity->addCollaborator($entity->getAssignee());
             }
         }
-    }
 
-    private function hasChangedField(PreUpdateEventArgs $eventArgs, $field)
-    {
-        return $eventArgs->hasChangedField($field);
+        if ($entity instanceof Comment) {
+            $issue = $entity->getIssue();
+            if (!$issue->getCollaborators()->contains($entity->getAuthor())) {
+                $issue->addCollaborator($entity->getAuthor());
+            }
+        }
     }
 }

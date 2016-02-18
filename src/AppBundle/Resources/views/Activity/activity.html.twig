@@ -1,0 +1,15 @@
+<div class="panel panel-primary">
+    <div class="panel-heading">{{ "activity.page.list"|trans }}</div>
+    <ul class="list-group">
+        {% for activity in activities %}
+            <li class="list-group-item">
+                User <a href="{{ path('user_show', { 'user': activity.user.id }) }}">{{ activity.user.fullName }}</a>
+                {{ activity.type|trans }}
+                <a href="{{ path('issue_show', { 'issue': activity.issue.code }) }}">{{ activity.issue.code }}</a>
+                for project <a
+                        href="{{ path('project_show', { 'project': activity.project.id }) }}">{{ activity.project.code }}</a>
+                on {{ activity.created|date('Y-m-d H:i:s') }}
+            </li>
+        {% endfor %}
+    </ul>
+</div>

@@ -2,6 +2,8 @@
 
 namespace AppBundle\Twig;
 
+use AppBundle\Entity\Activity;
+
 class AppExtension extends \Twig_Extension
 {
     public function getFilters()

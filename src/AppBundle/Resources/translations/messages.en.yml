@@ -52,6 +52,12 @@ issue:
         author: "Author"
         created: "Created date"
         delete: "Delete"
+activity:
+    page:
+        list: "Activity list"
+create_issue: "create issue"
+change_issue_status: "change status issue"
+comment_issue: "comment issue"
 
 
 

@@ -54,7 +54,7 @@ class ProjectController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('AppBundle:Project')->findAll();
 
-        $paginator  = $this->get('knp_paginator');
+        $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
             $entities,
             $this->get('request')->query->getInt('page', 1),
@@ -131,6 +131,11 @@ class ProjectController extends Controller
      */
     public function showAction(Project $project)
     {
-        return ['entity' => $project];
+        $em = $this->getDoctrine()->getManager();
+        $activities = $em->getRepository('AppBundle:Activity')->findByProject($project);
+        return [
+            'entity' => $project,
+            'activities' => $activities
+        ];
     }
 }

@@ -15,6 +15,14 @@ services:
         tags:
             - { name: security.voter }
 
+    comment.security.voter:
+        class:      AppBundle\Security\CommentVoter
+        public:     false
+        arguments:
+            - @security.role_hierarchy
+        tags:
+            - { name: security.voter }
+
     project.form.type:
         class: AppBundle\Form\ProjectFormType
         tags:
@@ -44,3 +52,11 @@ services:
             - { name: doctrine.event_listener, event: prePersist }
             - { name: doctrine.event_listener, event: preUpdate }
             - { name: doctrine.event_listener, event: postUpdate }
+
+    activity.listener:
+        class: AppBundle\EventListener\ActivityEventListener
+        arguments:
+            - @service_container
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
+            - { name: doctrine.event_listener, event: preUpdate }

@@ -67,7 +67,7 @@ class IssueController extends Controller
 
         return [
             'entities' => $pagination,
-            'entity' => $issue
+            'entity' => $issue,
         ];
     }
 
@@ -178,15 +178,19 @@ class IssueController extends Controller
             'action' => $this->generateUrl('issue_new_comment', ['issue' => $issue->getCode()]),
             'method' => 'POST'
         ]);
+        $em = $this->getDoctrine()->getManager();
+        $activities = $em->getRepository('AppBundle:Activity')->findByIssue($issue);
         return [
             'entity' => $issue,
-            'comment_form' => $createCommentForm->createView()
+            'comment_form' => $createCommentForm->createView(),
+            'activities' => $activities
         ];
     }
 
     /**
      * @Route("/{issue}/{comment}/edit", name="issue_edit_comment")
      * @ParamConverter("issue", class="AppBundle:Issue", options={"repository_method" = "findOneByCode"})
+     * @Security("is_granted('edit', comment)")
      * @Template()
      */
     public function editCommentAction(Comment $comment)
@@ -212,6 +216,7 @@ class IssueController extends Controller
     /**
      * @Route("/{issue}/comment/new", name="issue_new_comment")
      * @ParamConverter("issue", class="AppBundle:Issue", options={"repository_method" = "findOneByCode"})
+     * @Security("is_granted('create', issue)")
      * @Template("AppBundle:Issue:edit.html.twig")
      */
     public function newCommentAction(Issue $issue)
@@ -244,6 +249,7 @@ class IssueController extends Controller
     /**
      * @Route("/{issue}/{comment}/delete", name="issue_delete_comment")
      * @ParamConverter("issue", class="AppBundle:Issue", options={"repository_method" = "findOneByCode"})
+     * @Security("is_granted('delete', comment)")
      */
     public function deleteAction($issue, Comment $comment)
     {

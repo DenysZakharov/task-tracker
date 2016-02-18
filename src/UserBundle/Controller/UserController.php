@@ -32,7 +32,7 @@ class UserController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('UserBundle:User')->findAll();
 
-        $paginator  = $this->get('knp_paginator');
+        $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
             $entities,
             $this->get('request')->query->getInt('page', 1),
@@ -84,7 +84,12 @@ class UserController extends Controller
      */
     public function showAction(User $user)
     {
-        return ['entity' => $user];
+        $em = $this->getDoctrine()->getManager();
+        $activities = $em->getRepository('AppBundle:Activity')->findByUser($user);
+        return [
+            'entity' => $user,
+            'activities' => $activities
+        ];
     }
 
     /**

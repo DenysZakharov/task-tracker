@@ -66,6 +66,7 @@ class IssueFormType extends AbstractType
                                 EnumStatusIssue::CLOSED => 'issue.status.closed'
                             ],
                             'required' => true,
+                            'property' => 'value',
                             'translation_domain' => 'AppBundle'
                         ]);
                 }

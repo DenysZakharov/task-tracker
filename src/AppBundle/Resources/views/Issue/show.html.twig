@@ -110,6 +110,9 @@
     {% else %}
         {{ "issue.noCollaborators"|trans }}
     {% endif %}
+    {% if activities|length > 0 %}
+        {% include 'AppBundle:Activity:activity.html.twig' with { 'activities': activities } %}
+    {% endif %}
     <div class="panel panel-primary">
         <div class="panel-heading">{{ "issue.comment.details"|trans }}</div>
         <div class="panel-body">
@@ -126,8 +129,12 @@
                     <dt>{{ "issue.comment.body"|trans }}</dt>
                     <dd>{{ comment.body }}</dd>
                 </dl>
+                {% if is_granted("edit", comment) %}
                 <a class="btn btn-default" href="{{ path('issue_edit_comment', {"issue":entity.code,"comment":comment.id}) }}">{{ "issue.comment.update"|trans }}</a>
+                {% endif %}
+                {% if is_granted("delete", comment) %}
                 <a class="btn btn-default" href="{{ path('issue_delete_comment', {"issue":entity.code,"comment":comment.id}) }}">{{ "issue.comment.delete"|trans }}</a>
+                {% endif %}
                 <hr>
             {% endfor %}
 
