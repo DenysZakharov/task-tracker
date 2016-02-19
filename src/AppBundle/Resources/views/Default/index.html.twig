@@ -1,0 +1,11 @@
+{% extends '::base.html.twig' %}
+{% import "AppBundle::macros.html.twig" as CI %}
+
+{% block content %}
+    {% if entities|length > 0 %}
+        {{ CI.listOpenedReaopenedIssue(entities) }}
+    {% endif %}
+    {% if activities|length > 0 %}
+        {% include 'AppBundle:Activity:activity.html.twig' with { 'activities': activities } %}
+    {% endif %}
+{% endblock %}

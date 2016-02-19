@@ -33,12 +33,10 @@ class IssueController extends Controller
      */
     public function indexAction()
     {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $user = $this->getUser();
         $issue = $user->getIssues();
         $em = $this->getDoctrine()->getManager();
-        $user = $this->getUser();
         $entities = $em->getRepository('AppBundle:Issue')->findByUser($user);
-
         return [
             'entities' => $entities,
             'entity' => $issue

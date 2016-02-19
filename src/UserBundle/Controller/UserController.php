@@ -86,9 +86,11 @@ class UserController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $activities = $em->getRepository('AppBundle:Activity')->findByUser($user);
+        $issues = $em->getRepository('AppBundle:Issue')->findByUser($user);
         return [
             'entity' => $user,
-            'activities' => $activities
+            'activities' => $activities,
+            'issues' => $issues
         ];
     }
 

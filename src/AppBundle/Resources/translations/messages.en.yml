@@ -38,7 +38,7 @@ issue:
         create_subtask: "Create subtask"
         details: "Issue details"
         subtasks: "Subtasks"
-        collaborators: "Collaborators"
+        collaborators: "Collaborators list"
     users:
         username: "User name"
         email: "Email"
@@ -58,6 +58,19 @@ activity:
 create_issue: "create issue"
 change_issue_status: "change status issue"
 comment_issue: "comment issue"
+menu:
+    issue:
+      list: "Issue list"
+      new: "Create issue"
+    project:
+      list: "Project list"
+      new: "Create project"
+    user:
+      info: "User info"
+      list: "User list"
+      new: "Create user"
+    main: "Main page"
+
 
 
 

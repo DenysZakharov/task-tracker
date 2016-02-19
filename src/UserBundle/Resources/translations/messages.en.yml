@@ -35,5 +35,5 @@ role:
     admin: "Admin"
     operator: "Operator"
     manager: "Manager"
-
-
+menu:
+  users: "Users"

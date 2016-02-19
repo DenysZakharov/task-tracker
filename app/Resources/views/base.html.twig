@@ -13,30 +13,33 @@
 </head>
 <body>
 <nav class="container">
-    <div class="">
+    <div class="pull-left">
         {% block logo %}
             <button type="button" class="btn btn-default btn-lg">
                 <span class="glyphicon glyphicon-home" aria-hidden="true"></span> <a href="{{ path("homepage") }}">TASK
                     TRACKER</a>
             </button>
         {% endblock logo %}
-        {% block menu %}
-            <div class="menu"></div>
-        {% endblock menu %}
-
-        <div class="pull-right">
-            {% block auth %}
-                <div class="auth">
-                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                        {{ 'layout.logged_in_as'|trans }} <a
-                            href="{{ path("fos_user_profile_show") }}">{{ app.user.username }}</a>
-                        <a href="{{ path('fos_user_security_logout') }}">
-                            {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
-                        </a>
-                    {% endif %}
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            {% block menu %}
+                <div id="menu">
+                    {{ knp_menu_render('AppBundle:Builder:mainMenu', {'depth': 2, 'currentClass': 'active', 'matchingDepth': 2 }) }}
                 </div>
-            {% endblock auth %}
+            {% endblock menu %}
+        {% endif %}
+    </div>
+    {% block auth %}
+        <div class="pull-right">
+
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <a href="{{ path("fos_user_profile_show") }}">{{ app.user.username }}</a>
+                <a href="{{ path('fos_user_security_logout') }}">
+                    {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+                </a>
+            {% endif %}
+
         </div>
+    {% endblock auth %}
     </div>
 </nav>
 <div class="container">

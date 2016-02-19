@@ -13,18 +13,22 @@ class DefaultController extends Controller
 {
     /**
      * @Route("/", name="homepage")
+     * @Template()
      */
     public function indexAction(Request $request)
     {
         $securityContext = $this->container->get('security.authorization_checker');
         if ($securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $user = $this->getUser();
-            //$user->getRoles();
             $em = $this->getDoctrine()->getManager();
-            return $this->render('default/index.html.twig', array(
-                'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
-            ));
+            $entities = $em->getRepository('AppBundle:Issue')->findByCollaborator($user);
+            $activities = $em->getRepository('AppBundle:Activity')->findByUser($user);
+            return [
+                'entities' => $entities,
+                'activities' => $activities
+            ];
         }
+
 
         return $this->redirect($this->generateUrl('fos_user_security_login'));
     }

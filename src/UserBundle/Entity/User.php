@@ -10,7 +10,7 @@ use FOS\UserBundle\Model\User as BaseUser;
 
 
 /**
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="users")
  */
 class User extends BaseUser

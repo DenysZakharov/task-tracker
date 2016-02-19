@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-
+{% import "AppBundle::macros.html.twig" as CI %}
 {% block body %}
     <div class="panel panel-primary">
         <div class="panel-heading">{{ "user.details"|trans }}</div>
@@ -43,5 +43,8 @@
     </div>
     {% if activities|length > 0 %}
         {% include 'AppBundle:Activity:activity.html.twig' with { 'activities': activities } %}
+    {% endif %}
+    {% if issues|length > 0 %}
+        {{ CI.listOpenedReaopenedIssue(issues) }}
     {% endif %}
 {% endblock %}

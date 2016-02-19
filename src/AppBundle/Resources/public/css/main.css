@@ -2,3 +2,8 @@
     bottom: -30px;
     position: absolute;
 }
+#menu ul > li{
+
+    zoom:1;
+    *display:inline; /* this fix is needed for IE7- */
+}
