@@ -8,10 +8,20 @@ class DefaultControllerTest extends WebTestCase
 {
     public function testIndex()
     {
-        $client = static::createClient();
+        $client = static::createClient(array(), array(
+            'PHP_AUTH_USER' => 'admin',
+            'PHP_AUTH_PW' => 'test'
+        ));
+        $crawler = $client->request('GET', '/login');
+        $form = $crawler->selectButton('_submit')->form(array(
+            '_username'  => 'admin',
+            '_password'  => 'test',
+        ));
+        $client->submit($form);
 
-        $crawler = $client->request('GET', '/hello/Fabien');
+        $this->assertTrue($client->getResponse()->isRedirect());
 
-        $this->assertTrue($crawler->filter('html:contains("Hello Fabien")')->count() > 0);
+        $crawler = $client->followRedirect();
+        $this->assertContains('Add new User', $crawler->html());
     }
 }
