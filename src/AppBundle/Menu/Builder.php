@@ -24,7 +24,7 @@ class Builder implements ContainerAwareInterface
             'label' => $this->container->get('translator')->trans('menu.user.info'),
             'routeParameters' => ['user' => $currentUser->getId()]
         ]);
-        if (!false === $authChecker->isGranted(array('ROLE_ADMIN'))) {
+        if ($authChecker->isGranted(['ROLE_ADMIN'])) {
             $menu['User']->addChild('Users list', [
                 'label' => $this->container->get('translator')->trans('menu.user.list'),
                 'route' => 'user_list'
@@ -38,7 +38,7 @@ class Builder implements ContainerAwareInterface
             'route' => 'project',
             'label' => $this->container->get('translator')->trans('menu.project.list'),
         ]);
-        if (!false === $authChecker->isGranted(array('ROLE_ADMIN', 'ROLE_MANAGER'))) {
+        if ($authChecker->isGranted(['ROLE_ADMIN', 'ROLE_MANAGER'])) {
             $menu['Project']->addChild('Project list', [
                 'label' => $this->container->get('translator')->trans('menu.project.list'),
                 'route' => 'project_list'
@@ -52,7 +52,7 @@ class Builder implements ContainerAwareInterface
             'route' => 'issue',
             'label' => $this->container->get('translator')->trans('menu.issue.list'),
         ]);
-        if (!false === $authChecker->isGranted(array('ROLE_ADMIN', 'ROLE_MANAGER'))) {
+        if ($authChecker->isGranted(['ROLE_ADMIN', 'ROLE_MANAGER'])) {
             $menu['Issue']->addChild('Issue list', [
                 'label' => $this->container->get('translator')->trans('menu.issue.list'),
                 'route' => 'issue_list'

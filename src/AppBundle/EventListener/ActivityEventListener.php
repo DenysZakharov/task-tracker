@@ -44,8 +44,11 @@ class ActivityEventListener
         }
 
         if ($entity instanceof Issue) {
-            $user = $this->container->get('security.context')->getToken()->getUser();
-            $this->setActivity($entity, $user, Activity::CREATE_ISSUE, $entityManager);
+            $currentUser = $this->container->get('security.context')->getToken();
+            if($currentUser !== null) {
+                $user = $currentUser->getUser();
+                $this->setActivity($entity, $user, Activity::CREATE_ISSUE, $entityManager);
+            }
         }
 
         if ($entity instanceof Activity) {
