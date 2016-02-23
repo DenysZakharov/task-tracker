@@ -63,6 +63,8 @@ class UserController extends Controller
 
             if ($form->isValid()) {
                 $entityManager = $this->getDoctrine()->getManager();
+                $role = $form->get('roles')->getData();
+                $user->setRoles([$role]);
                 $entityManager->persist($user);
                 $entityManager->flush();
 
@@ -96,7 +98,7 @@ class UserController extends Controller
 
     /**
      * @Route("/{user}/edit", name="user_edit")
-     * @Security("is_granted('edit', user)")
+     * @Security("is_granted('ROLE_ADMIN')")
      * @Template()
      */
     public function editAction(User $user)
@@ -109,6 +111,9 @@ class UserController extends Controller
             $entityManager = $this->getDoctrine()->getManager();
             $editForm->handleRequest($this->get('request'));
             if ($editForm->isValid()) {
+                $role = $editForm->get('roles')->getData();
+                $user->setRoles([$role]);
+                $entityManager->persist($user);
                 $entityManager->flush();
 
                 return $this->redirect($this->generateUrl('user_show', ['user' => $user->getId()]));

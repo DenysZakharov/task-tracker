@@ -2,32 +2,19 @@
 
 namespace AppBundle\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\BrowserKit\Cookie;
+use AppBundle\Tests\Controller\WebTestCase;
 
 
 class DefaultControllerTest extends WebTestCase
 {
     public function testIndex()
     {
-        $client = static::createClient();
-        $container = $client->getContainer();
+        $client = static::createClient(array(), array(
+            'PHP_AUTH_USER' => 'admin',
+            'PHP_AUTH_PW'   => 'test'
+        ));
 
-        $session = $container->get('session');
-
-        $userManager = $container->get('fos_user.user_manager');
-
-        $loginManager = $container->get('fos_user.security.login_manager');
-        $firewallName = $container->getParameter('fos_user.firewall_name');
-
-        $user = $userManager->findUserBy(array('username' => 'admin'));
-        $loginManager->loginUser($firewallName, $user);
-
-        $container->get('session')->set('_security_' . $firewallName,
-            serialize($container->get('security.context')->getToken()));
-        $container->get('session')->save();
-        $client->getCookieJar()->set(new Cookie($session->getName(), $session->getId()));
-
-        return $client;
+        $crawler = $client->request('GET', '/');
+        self::assertContains('login', $crawler->html());
     }
 }

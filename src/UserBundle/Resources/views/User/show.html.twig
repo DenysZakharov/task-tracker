@@ -33,9 +33,15 @@
         </div>
     </div>
     <div class="actions">
-        {% if is_granted('edit', entity) %}
+        {% if is_granted('ROLE_ADMIN') %}
             <p>
                 <a class="btn btn-primary" href="{{ path("user_edit", {user: entity.id}) }}">
+                    {{ "user.page.edit"|trans }}
+                </a>
+            </p>
+        {% else %}
+            <p>
+                <a class="btn btn-primary" href="{{ path("fos_user_profile_edit") }}">
                     {{ "user.page.edit"|trans }}
                 </a>
             </p>

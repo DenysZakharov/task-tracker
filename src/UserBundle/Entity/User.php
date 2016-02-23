@@ -49,6 +49,13 @@ class User extends BaseUser
      */
     protected $issues;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="enum_timezone_user")
+     */
+    protected $timezone;
+
     public function __construct()
     {
         parent::__construct();
@@ -154,5 +161,28 @@ class User extends BaseUser
     public function getIssues()
     {
         return $this->issues;
+    }
+
+    /**
+     * Set timezone
+     *
+     * @param string $timezone
+     * @return User
+     */
+    public function setTimezone($timezone)
+    {
+        $this->timezone = $timezone;
+
+        return $this;
+    }
+
+    /**
+     * Get timezone
+     *
+     * @return string
+     */
+    public function getTimezone()
+    {
+        return $this->timezone;
     }
 }

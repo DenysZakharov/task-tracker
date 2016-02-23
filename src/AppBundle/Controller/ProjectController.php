@@ -37,7 +37,7 @@ class ProjectController extends Controller
 
         return [
             'entities' => $entities,
-            'entity' => $project
+            'entity' => $user
         ];
     }
 

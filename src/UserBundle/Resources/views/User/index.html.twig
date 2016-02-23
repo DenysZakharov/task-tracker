@@ -27,7 +27,7 @@
                     <td>{{ entity.fullName }}</td>
                     <td>{{ entity.email }}</td>
                     <td>{{ entity.roles[0]|trans }}</td>
-                    <td>{{ entity.lastLogin|date('Y-m-d H:i:s') }}</td>
+                    <td>{{ entity.lastLogin|formatDate() }}</td>
                 </tr>
             {% endfor %}
             </tbody>

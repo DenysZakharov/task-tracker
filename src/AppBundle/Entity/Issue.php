@@ -302,7 +302,7 @@ class Issue
     /**
      * Set status
      *
-     * @param enum_status_issue $status
+     * @param string $status
      * @return Issue
      */
     public function setStatus($status)
@@ -315,7 +315,7 @@ class Issue
     /**
      * Get status
      *
-     * @return enum_status_issue 
+     * @return string
      */
     public function getStatus()
     {

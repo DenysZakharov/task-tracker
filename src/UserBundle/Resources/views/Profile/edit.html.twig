@@ -26,6 +26,13 @@
         </div>
 
         <div class="form-group">
+            {{ form_label(form.timezone, null, {'label_attr': {'class' : 'col-sm-4 control-label'}}) }}
+            <div class="col-sm-6">
+                {{ form_widget(form.timezone, { 'attr':  {'class': 'form-control'}}) }}
+            </div>
+        </div>
+
+        <div class="form-group">
             {{ form_label(form.current_password, null, {'label_attr': {'class' : 'col-sm-4 control-label'}}) }}
             <div class="col-sm-6">
                 {{ form_widget(form.current_password, { 'attr':  {'class': 'form-control'}}) }}

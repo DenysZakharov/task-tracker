@@ -19,6 +19,10 @@
                 {{ form_widget(form.username) }}
             </div>
             <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1"> {{ form_label(form.timezone) }}</span>
+                {{ form_widget(form.timezone) }}
+            </div>
+            <div class="input-group">
                 <span class="input-group-addon" id="basic-addon1">{{ form_label(form.plainPassword.first) }}</span>
                 {{ form_widget(form.plainPassword.first) }}
             </div>

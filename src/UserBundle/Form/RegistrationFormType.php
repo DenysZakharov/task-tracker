@@ -5,6 +5,7 @@ namespace UserBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
+use UserBundle\Entity\Mapping\EnumTimezoneUser;
 
 class RegistrationFormType extends AbstractType
 {
@@ -34,6 +35,20 @@ class RegistrationFormType extends AbstractType
             ->add('email', 'email', $attributeEmail)
             ->add('fullName', 'text', $attributeFullName)
             ->add('username', 'text', $attributeUserName)
+            ->add('timezone', 'choice', [
+                'choices' => [
+                    EnumTimezoneUser::AMSTREDAM => 'timezone.europe.amsterdam',
+                    EnumTimezoneUser::ANDORRA => 'timezone.europe.andorra',
+                    EnumTimezoneUser::ATHENS => 'timezone.europe.athens',
+                    EnumTimezoneUser::BELFAST => 'timezone.europe.belfast',
+                    EnumTimezoneUser::BELGRADE => 'timezone.europe.belgrade',
+                    EnumTimezoneUser::BERLIN => 'timezone.europe.berlin',
+                    EnumTimezoneUser::KIEV => 'timezone.europe.kiev',
+                    EnumTimezoneUser::LONDON => 'timezone.europe.london'
+                ],
+                'required' => true,
+                'translation_domain' => 'UserBundle'
+            ])
             ->add('plainPassword', 'repeated', [
                 'type' => 'password',
                 'first_options' => $attrPasswordFirst,

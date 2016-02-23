@@ -6,6 +6,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+use UserBundle\Entity\User;
+use UserBundle\Entity\Mapping\EnumTimezoneUser;
+
 class UserType extends AbstractType
 {
     public function getName()
@@ -40,14 +43,29 @@ class UserType extends AbstractType
                 ],
                 'invalid_message' => 'fos_user.password.mismatch'
             ])
+            ->add('timezone', 'choice', [
+                'choices' => [
+                    EnumTimezoneUser::AMSTREDAM => 'timezone.europe.amsterdam',
+                    EnumTimezoneUser::ANDORRA => 'timezone.europe.andorra',
+                    EnumTimezoneUser::ATHENS => 'timezone.europe.athens',
+                    EnumTimezoneUser::BELFAST => 'timezone.europe.belfast',
+                    EnumTimezoneUser::BELGRADE => 'timezone.europe.belgrade',
+                    EnumTimezoneUser::BERLIN => 'timezone.europe.berlin',
+                    EnumTimezoneUser::KIEV => 'timezone.europe.kiev',
+                    EnumTimezoneUser::LONDON => 'timezone.europe.london'
+                ],
+                'required' => true,
+                'translation_domain' => 'UserBundle'
+            ])
             ->add('roles', 'choice', [
                 'choices' => [
-                    'ROLE_ADMIN' => "role.admin",
-                    'ROLE_MANAGER' => "role.manager",
-                    'ROLE_OPERATOR' => "role.operator"
+                    User::ROLE_ADMIN => 'role.admin',
+                    User::ROLE_MANAGER => 'role.manager',
+                    User::ROLE_OPERATOR => 'role.operator'
                 ],
-                'label' => 'Roles',
-                'multiple' => true,
+                'label' => 'Role',
+                'mapped' => false,
+                'required' => true,
                 'translation_domain' => 'UserBundle'
             ])
             ->add('enabled', 'choice', [

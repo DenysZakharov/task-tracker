@@ -36,7 +36,7 @@
                         <a href="{{ path('user_show', { 'user': user.id }) }}">{{ user.username }}</a>
                     </td>
                     <td>{{ user.email }}</td>
-                    <td>{{ user.lastLogin|date('Y-m-d') }}</td>
+                    <td>{{ user.lastLogin|formatDate() }}</td>
                     {% if (user.enabled) %}
                         <td class="status success" title="Activated"></td>
                     {% else %}

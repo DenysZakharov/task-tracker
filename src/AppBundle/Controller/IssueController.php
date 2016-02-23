@@ -86,7 +86,6 @@ class IssueController extends Controller
             $editForm->handleRequest($this->get('request'));
             if ($editForm->isValid()) {
                 $entityManager->flush();
-
                 return $this->redirect($this->generateUrl('issue_show', ['issue' => $issue->getCode()]));
             }
         }

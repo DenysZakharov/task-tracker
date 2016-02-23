@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 
+use UserBundle\Entity\Mapping\EnumTimezoneUser;
 
 class ProfileFormType extends AbstractType
 {
@@ -23,6 +24,20 @@ class ProfileFormType extends AbstractType
                 'translation_domain' => 'FOSUserBundle',
                 'mapped' => false,
                 'constraints' => new UserPassword()
+            ])
+            ->add('timezone', 'choice', [
+                'choices' => [
+                    EnumTimezoneUser::AMSTREDAM => 'timezone.europe.amsterdam',
+                    EnumTimezoneUser::ANDORRA => 'timezone.europe.andorra',
+                    EnumTimezoneUser::ATHENS => 'timezone.europe.athens',
+                    EnumTimezoneUser::BELFAST => 'timezone.europe.belfast',
+                    EnumTimezoneUser::BELGRADE => 'timezone.europe.belgrade',
+                    EnumTimezoneUser::BERLIN => 'timezone.europe.berlin',
+                    EnumTimezoneUser::KIEV => 'timezone.europe.kiev',
+                    EnumTimezoneUser::LONDON => 'timezone.europe.london'
+                ],
+                'required' => true,
+                'translation_domain' => 'UserBundle'
             ])
             ->add('fullName', 'text', [
                 'translation_domain' => 'FOSUserBundle'

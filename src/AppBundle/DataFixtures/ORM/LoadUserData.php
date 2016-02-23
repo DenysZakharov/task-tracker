@@ -8,6 +8,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use UserBundle\Entity\User;
+use UserBundle\Entity\Mapping\EnumTimezoneUser;
 
 class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, FixtureInterface, ContainerAwareInterface
 {
@@ -28,6 +29,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, F
             ->setEmail('admin@test.com')
             ->setPlainPassword('test')
             ->setFullName('Administartor')
+            ->setTimezone(EnumTimezoneUser::KIEV)
             ->setEnabled(true)
             ->addRole(User::ROLE_ADMIN);
         $userManager->updateUser($admin);
@@ -39,6 +41,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, F
             ->setPlainPassword('test')
             ->setFullName('Manager')
             ->setEnabled(true)
+            ->setTimezone(EnumTimezoneUser::LONDON)
             ->addRole(User::ROLE_MANAGER);
         $userManager->updateUser($manager);
 
@@ -49,6 +52,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, F
             ->setPlainPassword('test')
             ->setFullName('Operator')
             ->setEnabled(true)
+            ->setTimezone(EnumTimezoneUser::AMSTREDAM)
             ->addRole(User::ROLE_OPERATOR);
         $userManager->updateUser($operator);
 

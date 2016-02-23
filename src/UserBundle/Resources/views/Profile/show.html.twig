@@ -7,6 +7,8 @@
         <p>{{ 'user.grid.fullName'|trans }}: {{ user.fullName }}</p>
 
         <p>{{ 'user.grid.email'|trans }}: {{ user.email }}</p>
+
+        <p>{{ 'user.grid.timezone'|trans }}: {{ user.timezone }}</p>
     </div>
     <a href="{{ path('fos_user_profile_edit') }}">{{ 'user.page.edit'|trans }}</a>
 {% endblock content %}

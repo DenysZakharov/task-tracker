@@ -18,7 +18,7 @@
                     <td><a href="{{ path('project_show', { 'project': entity.id }) }}">{{ entity.code }}</a></td>
                     <td>{{ entity.label }}</td>
                     <td>{{ entity.summary }}</td>
-                    <td>{{ entity.created|date('Y-m-d') }}</td>
+                    <td>{{ entity.created|formatDate() }}</td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -29,7 +29,6 @@
             {% endif %}
         </div>
     </div>
-
     {% if is_granted('create', entity) %}
         <p>
             <a class="btn btn-primary" href="{{ path('project_new') }}">

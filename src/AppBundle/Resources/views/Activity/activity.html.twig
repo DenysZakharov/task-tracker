@@ -8,7 +8,7 @@
                 <a href="{{ path('issue_show', { 'issue': activity.issue.code }) }}">{{ activity.issue.code }}</a>
                 for project <a
                         href="{{ path('project_show', { 'project': activity.project.id }) }}">{{ activity.project.code }}</a>
-                on {{ activity.created|date('Y-m-d H:i:s') }}
+                on {{ activity.created|formatDate() }}
             </li>
         {% endfor %}
     </ul>

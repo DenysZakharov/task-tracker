@@ -15,7 +15,7 @@
                     <td>
                         <a href="{{ path('user_show', { 'user': collaborator.id }) }}">{{ collaborator.fullName|default('undefined') }}</a>
                     </td>
-                    <td>{{ collaborator.lastlogin|date('Y-m-d') }}</td>
+                    <td>{{ collaborator.lastlogin|formatDate() }}</td>
                     {% if collaborator.enabled %}
                         <td class="status success" title="Activated"></td>
                     {% else %}

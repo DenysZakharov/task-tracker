@@ -26,11 +26,15 @@ class ActivityEventListener
 
         if ($issue instanceof Issue) {
             $user = $this->container->get('security.context')->getToken()->getUser();
-
             if ($eventArgs->hasChangedField('status')) {
-                $this->setActivity($issue, $user, Activity::CHANGE_ISSUE_STATUS, $entityManager);
+                $this->setActivity($issue, $user, Activity::CHANGE_ISSUE_STATUS, $entityManager, true);
             }
         }
+    }
+
+    public function postUpdate(LifecycleEventArgs $event)
+    {
+        $event->getEntityManager()->flush();
     }
 
     public function postPersist(LifecycleEventArgs $args)
@@ -45,7 +49,7 @@ class ActivityEventListener
 
         if ($entity instanceof Issue) {
             $currentUser = $this->container->get('security.context')->getToken();
-            if($currentUser !== null) {
+            if ($currentUser !== null) {
                 $user = $currentUser->getUser();
                 $this->setActivity($entity, $user, Activity::CREATE_ISSUE, $entityManager);
             }
@@ -74,7 +78,7 @@ class ActivityEventListener
         }
     }
 
-    private function setActivity($issue, $user, $type, $entityManager)
+    private function setActivity($issue, $user, $type, $entityManager, $pre = false)
     {
         $entity = new Activity();
         $entity
@@ -83,6 +87,8 @@ class ActivityEventListener
             ->setUser($user)
             ->setType($type);
         $entityManager->persist($entity);
-        $entityManager->flush();
+        if (!$pre) {
+            $entityManager->flush();
+        }
     }
 }

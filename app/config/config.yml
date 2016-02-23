@@ -99,6 +99,7 @@ doctrine:
             enum_status_issue: AppBundle\Entity\Mapping\EnumStatusIssue
             enum_priority_issue: AppBundle\Entity\Mapping\EnumPriorityIssue
             enum_resolution_issue: AppBundle\Entity\Mapping\EnumResolutionIssue
+            enum_timezone_user: UserBundle\Entity\Mapping\EnumTimezoneUser
         mapping_types:
             enum: string
         # if using pdo_sqlite as your database driver:
