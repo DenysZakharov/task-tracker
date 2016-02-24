@@ -28,6 +28,7 @@ security:
 
             logout:       true
             anonymous:    ~
+            http_basic: ~
 
     access_control:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }

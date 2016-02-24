@@ -15,6 +15,6 @@ class DefaultControllerTest extends WebTestCase
         ));
 
         $crawler = $client->request('GET', '/');
-        self::assertContains('login', $crawler->html());
+        self::assertContains('Issue list', $crawler->html());
     }
 }

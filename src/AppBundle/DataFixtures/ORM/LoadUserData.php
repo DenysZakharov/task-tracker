@@ -32,10 +32,10 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, F
             ->setTimezone(EnumTimezoneUser::KIEV)
             ->setEnabled(true)
             ->addRole(User::ROLE_ADMIN);
-        $userManager->updateUser($admin);
+        $manager->persist($admin);
 
-        $manager = $userManager->createUser();
-        $manager
+        $managers = $userManager->createUser();
+        $managers
             ->setUsername('manager')
             ->setEmail('manager@test.com')
             ->setPlainPassword('test')
@@ -43,7 +43,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, F
             ->setEnabled(true)
             ->setTimezone(EnumTimezoneUser::LONDON)
             ->addRole(User::ROLE_MANAGER);
-        $userManager->updateUser($manager);
+        $manager->persist($managers);
 
         $operator = $userManager->createUser();
         $operator
@@ -54,10 +54,12 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, F
             ->setEnabled(true)
             ->setTimezone(EnumTimezoneUser::AMSTREDAM)
             ->addRole(User::ROLE_OPERATOR);
-        $userManager->updateUser($operator);
+        $manager->persist($operator);
+
+        $manager->flush();
 
         $this->addReference('user_admin', $admin);
-        $this->addReference('user_manager', $manager);
+        $this->addReference('user_manager', $managers);
         $this->addReference('user_operator', $operator);
     }
 

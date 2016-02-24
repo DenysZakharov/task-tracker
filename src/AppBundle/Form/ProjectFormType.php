@@ -23,7 +23,7 @@ class ProjectFormType extends AbstractType
             ->add('users', 'entity', [
                 'required' => true,
                 'class' => 'UserBundle:User',
-                'property' => 'username',
+                'choice_label' => 'username',
                 'multiple' => true,
             ]);
     }

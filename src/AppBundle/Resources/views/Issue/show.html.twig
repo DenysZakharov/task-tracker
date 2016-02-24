@@ -90,8 +90,7 @@
                 <dt>{{ "issue.grid.updated"|trans }}</dt>
                 <dd>{{ entity.updated|formatDate() }}</dd>
             </dl>
-
-            {% if entity.type == "Story" %}
+            {% if entity.type == "story" %}
                 <dl class="dl-horizontal">
                     <dt>{{ "issue.page.subtasks"|trans }}</dt>
                     <dd>

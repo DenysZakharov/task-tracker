@@ -89,7 +89,7 @@ class IssueFormType extends AbstractType
                 'required' => true,
                 'property_path' => 'project',
                 'class' => 'AppBundle:Project',
-                'property' => 'label',
+                'choice_label' => 'label',
                 'multiple' => false,
                 'query_builder' => function (EntityRepository $er) use ($user) {
                     return $er->findByUsers($user, true);
@@ -98,7 +98,7 @@ class IssueFormType extends AbstractType
             ->add('assignee', 'entity', [
                 'property_path' => 'assignee',
                 'class' => 'UserBundle:User',
-                'property' => 'username',
+                'choice_label' => 'username',
                 'multiple' => false,
             ]);
 

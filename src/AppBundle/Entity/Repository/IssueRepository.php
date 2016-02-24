@@ -5,6 +5,7 @@ namespace AppBundle\Entity\Repository;
 use Doctrine\ORM\EntityRepository;
 
 use UserBundle\Entity\User;
+use AppBundle\Entity\Mapping\EnumStatusIssue;
 
 /**
  * IssueRepository
@@ -19,7 +20,11 @@ class IssueRepository extends EntityRepository
         $query = $this->createQueryBuilder('issue');
 
         $query->where('issue.assignee = :user_id')
-            ->setParameter('user_id', $user->getId());
+            ->andwhere('issue.status = :status')
+            ->setParameters([
+                'user_id' => $user->getId(),
+                'status' => EnumStatusIssue::OPEN
+            ]);
 
         return $query->getQuery()->getResult();
     }
@@ -30,7 +35,11 @@ class IssueRepository extends EntityRepository
 
         $query->leftJoin('issue.collaborators', 'c')
             ->where('c.id = :user_id')
-            ->setParameter('user_id', $user->getId());
+            ->andwhere('issue.status = :status')
+            ->setParameters([
+                'user_id' => $user->getId(),
+                'status' => EnumStatusIssue::OPEN
+            ]);
 
         return $query->getQuery()->getResult();
     }

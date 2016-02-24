@@ -7,36 +7,28 @@ use AppBundle\Tests\Controller\WebTestCase;
 
 class OperatorSecurityTest extends WebTestCase
 {
-    public function testCreateIssue()
+    /**
+     * @dataProvider urlProvider
+     */
+    public function testPageIsSuccessful($url)
     {
-        $client = static::createClient(array(), array(
+        $client = static::createClient([], [
             'PHP_AUTH_USER' => 'operator',
             'PHP_AUTH_PW' => 'test'
-        ));
+        ]);
 
-        $client->request('GET', '/issue/new');
-        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        $client->request('GET', $url);
+        $this->assertTrue($client->getResponse()->isSuccessful());
     }
 
-    public function testViewIssue()
+    public function urlProvider()
     {
-        $client = static::createClient(array(), array(
-            'PHP_AUTH_USER' => 'operator',
-            'PHP_AUTH_PW' => 'test'
-        ));
-
-        $client->request('GET', '/issue/task-three');
-        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
-    }
-
-    public function testEditIssue()
-    {
-        $client = static::createClient(array(), array(
-            'PHP_AUTH_USER' => 'operator',
-            'PHP_AUTH_PW' => 'test'
-        ));
-
-        $client->request('GET', '/issue/task-one/edit');
-        $this->assertEquals(Response::HTTP_FORBIDDEN, $client->getResponse()->getStatusCode());
+        return [
+            ['/'],
+            ['/issue/new'],
+            ['/issue/task-three/edit'],
+            ['/issue/task-three'],
+            ['/project/']
+        ];
     }
 }
