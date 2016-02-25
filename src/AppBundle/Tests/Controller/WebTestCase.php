@@ -36,6 +36,10 @@ class WebTestCase extends BaseWebTestCase
         $issues->setContainer($container);
         $loader->addFixture($issues);
 
+        $activity = new \AppBundle\DataFixtures\ORM\LoadActivityData();
+        $activity->setContainer($container);
+        $loader->addFixture($activity);
+
         $executor->execute($loader->getFixtures());
     }
 }

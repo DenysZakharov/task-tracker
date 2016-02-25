@@ -12,13 +12,10 @@ class UserVoterTest extends \PHPUnit_Framework_TestCase
 
     protected $tokenInterface;
 
-    protected $mockUser;
-
     protected function setUp()
     {
         $this->voter = new UserVoter();
         $this->tokenInterface = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
-        $this->mockUser = $this->getMock('UserBundle\Entity\User');
     }
 
     /**
@@ -75,7 +72,7 @@ class UserVoterTest extends \PHPUnit_Framework_TestCase
             $expected,
             $this->voter->vote(
                 $this->tokenInterface,
-                $this->mockUser,
+                $user,
                 [$attribute]
             )
         );
@@ -84,9 +81,9 @@ class UserVoterTest extends \PHPUnit_Framework_TestCase
     public function voteProvider()
     {
         return [
-            [User::ROLE_ADMIN, VoterInterface::ACCESS_ABSTAIN, UserVoter::VIEW],
-            [User::ROLE_OPERATOR, VoterInterface::ACCESS_ABSTAIN, UserVoter::CREATE],
-            [User::ROLE_MANAGER, VoterInterface::ACCESS_ABSTAIN, UserVoter::EDIT]
+            [User::ROLE_ADMIN, VoterInterface::ACCESS_GRANTED, UserVoter::CREATE],
+            [User::ROLE_OPERATOR, VoterInterface::ACCESS_GRANTED, UserVoter::VIEW],
+            [User::ROLE_MANAGER, VoterInterface::ACCESS_GRANTED, UserVoter::EDIT]
         ];
     }
 }

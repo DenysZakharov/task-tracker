@@ -3,6 +3,7 @@
 namespace AppBundle\Tests\Unit\Security;
 
 use UserBundle\Entity\User;
+use AppBundle\Entity\Project;
 use AppBundle\Security\ProjectVoter;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
@@ -18,7 +19,7 @@ class ProjectVoterTest extends \PHPUnit_Framework_TestCase
     {
         $this->voter = new ProjectVoter();
         $this->tokenInterface = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
-        $this->mockProject = $this->getMock('AppBundle\Entity\Project');
+        $this->mockProject = new Project();
     }
 
     /**
@@ -84,9 +85,9 @@ class ProjectVoterTest extends \PHPUnit_Framework_TestCase
     public function voteProvider()
     {
         return [
-            [User::ROLE_ADMIN, VoterInterface::ACCESS_ABSTAIN, ProjectVoter::VIEW],
+            [User::ROLE_ADMIN, VoterInterface::ACCESS_GRANTED, ProjectVoter::VIEW],
             [User::ROLE_OPERATOR, VoterInterface::ACCESS_ABSTAIN, ProjectVoter::CREATE],
-            [User::ROLE_MANAGER, VoterInterface::ACCESS_ABSTAIN, ProjectVoter::EDIT]
+            [User::ROLE_MANAGER, VoterInterface::ACCESS_GRANTED, ProjectVoter::EDIT]
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace AppBundle\Tests\Unit\Security;
 
 use UserBundle\Entity\User;
+use AppBundle\Entity\Issue;
 use AppBundle\Security\IssueVoter;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
@@ -18,7 +19,7 @@ class IssueVoterTest extends \PHPUnit_Framework_TestCase
     {
         $this->voter = new IssueVoter();
         $this->tokenInterface = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
-        $this->mockIssue = $this->getMock('AppBundle\Entity\Issue');
+        $this->mockIssue = new Issue();
     }
 
     /**
@@ -85,10 +86,10 @@ class IssueVoterTest extends \PHPUnit_Framework_TestCase
     public function voteProvider()
     {
         return [
-            [User::ROLE_ADMIN, VoterInterface::ACCESS_ABSTAIN, IssueVoter::VIEW],
+            [User::ROLE_ADMIN, VoterInterface::ACCESS_GRANTED, IssueVoter::VIEW],
             [User::ROLE_OPERATOR, VoterInterface::ACCESS_ABSTAIN, IssueVoter::CREATE],
             [User::ROLE_OPERATOR, VoterInterface::ACCESS_ABSTAIN, IssueVoter::ADD_SUB_TASK],
-            [User::ROLE_MANAGER, VoterInterface::ACCESS_ABSTAIN, IssueVoter::EDIT]
+            [User::ROLE_MANAGER, VoterInterface::ACCESS_GRANTED, IssueVoter::EDIT]
         ];
     }
 }

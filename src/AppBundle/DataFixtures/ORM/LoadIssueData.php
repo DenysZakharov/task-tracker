@@ -66,6 +66,10 @@ class LoadIssueData extends AbstractFixture implements OrderedFixtureInterface, 
         $manager->persist($issueThree);
 
         $manager->flush();
+
+        $this->addReference('issue_one', $issue);
+        $this->addReference('issue_two', $issueTwo);
+        $this->addReference('issue_three', $issueThree);
     }
 
     public function getOrder()
